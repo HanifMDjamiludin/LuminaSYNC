@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>237901334227-45fobdl8votum4bmcdm0k6cpjkufs6nh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.237901334227-45fobdl8votum4bmcdm0k6cpjkufs6nh</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>237901334227-po37kpc5u6g43b3rigck47ce24pd23sn.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAogzEtKu3ZB2JYMDbRNE5Z67acxaBne7g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>237901334227</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.luminasyncflutter</string>
+	<key>PROJECT_ID</key>
+	<string>luminasync-e9f56</string>
+	<key>STORAGE_BUCKET</key>
+	<string>luminasync-e9f56.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:237901334227:ios:3fb0ed66dddf75f0547626</string>
+</dict>
+</plist>

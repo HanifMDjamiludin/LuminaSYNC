@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "237901334227",
+    "project_id": "luminasync-e9f56",
+    "storage_bucket": "luminasync-e9f56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237901334227:android:781d62fdb24001d1547626",
+        "android_client_info": {
+          "package_name": "com.example.luminasyncflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237901334227-ppj7v6292s372bnhqk3am26ue20tt5j4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.luminasyncflutter",
+            "certificate_hash": "d9b3f43fe8c251f54d2bb1c257becdd3e6745d39"
+          }
+        },
+        {
+          "client_id": "237901334227-ha0181nmai6mc8ehbbmjk848j9b5qk3v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHX34JiPY0j4fzKzFCxDOVFOIqygmoGQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237901334227-ha0181nmai6mc8ehbbmjk848j9b5qk3v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
