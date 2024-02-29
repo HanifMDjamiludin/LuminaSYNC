@@ -19,8 +19,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _phoneController =
-      TextEditingController(); // Phone number controller
+  final TextEditingController _phoneController = TextEditingController();
 
   late TabController _tabController;
   bool _isLoading = false;
@@ -38,6 +37,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     _googleSignIn.signInSilently();
   }
 
+  // Dispose of controllers and the tab controller when the widget is removed.
   @override
   void dispose() {
     _emailController.dispose();
@@ -48,6 +48,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     super.dispose();
   }
 
+  // Attempts to sign in with email and password using Firebase Authentication.
+  // If successful, resets controllers and navigates to the home screen.
   Future<void> _signIn(BuildContext context) async {
     try {
       setState(() {
@@ -72,6 +74,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     }
   }
 
+  // Attempts to create a new user with email and password using Firebase Authentication.
+  // If successful, resets controllers and navigates to the home screen.
   Future<void> _signUp(BuildContext context) async {
     try {
       setState(() {
@@ -96,6 +100,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     }
   }
 
+  // Signs in with Google using the Google Sign-In package and Firebase Authentication.
+  // Resets controllers and navigates to the home screen upon successful sign-in.
   Future<void> _signInWithGoogle() async {
     try {
       await _googleSignIn.signOut();
@@ -126,6 +132,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     }
   }
 
+  // Clears the text controllers for email, password, username, and phone number.
   void _resetControllers() {
     _emailController.clear();
     _passwordController.clear();
@@ -133,6 +140,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     _phoneController.clear();
   }
 
+  //Navigation to homescreen with an animation
   void _navigateToHomeScreen() {
     Navigator.pushReplacement(
       context,
