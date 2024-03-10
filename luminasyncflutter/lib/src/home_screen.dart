@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:luminasyncflutter/creator.dart';
 import 'package:luminasyncflutter/switch.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _getBody(_currentIndex),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -44,6 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.pattern),
             label: 'Patterns',
           ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.pallet), label: 'Pattern Creator'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
@@ -64,8 +68,28 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         return _buildHomeTab();
       case 1:
-        return Column(children: [SwitchAndButton(), SwitchAndButton(), SwitchAndButton(), SwitchAndButton(), SwitchAndButton()],);
+        return Column(
+          children: [
+            SwitchAndButton(),
+            SwitchAndButton(),
+            SwitchAndButton(),
+            SwitchAndButton(),
+            SwitchAndButton()
+          ],
+        );
       case 2:
+        return Row(
+          children: [
+            PatternCreator(),
+            PatternCreator(),
+            PatternCreator(),
+            PatternCreator(),
+            PatternCreator(),
+            PatternCreator(),
+            PatternCreator()
+          ],
+        );
+      case 3:
         return _buildProfileTab();
       default:
         return Container();
@@ -75,6 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHomeTab() {
     return Center(
       child: Text('Main Page'),
+    );
+  }
+
+  Widget _buildCreatorTab() {
+    return Center(
+      child: Text('creator Page'),
     );
   }
 
