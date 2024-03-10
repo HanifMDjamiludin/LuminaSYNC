@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         return _buildHomeTab();
       case 1:
-        return _buildSettingsTab();
+        return Column(children: [SwitchAndButton(), SwitchAndButton(), SwitchAndButton(), SwitchAndButton(), SwitchAndButton()],);
       case 2:
         return _buildProfileTab();
       default:
