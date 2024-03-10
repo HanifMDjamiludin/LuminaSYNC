@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -26,14 +28,28 @@ class PatternCreator extends StatefulWidget {
 class _PatternCreatorState extends State<PatternCreator> {
   bool _switchValue = false;
 
-  void _onButtonPressed() {
-    // Do something when the button is pressed
-    print('Button clicked');
-    // Navigator.push(
-    //   context
-    //   ,MaterialPageRoute(builder: (context) => PatternGrid()),
-    // );
-  }
+void _onButtonPressed() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Pick a Color'),
+        content: Container(
+          width: double.maxFinite, // Set width to fill available space
+          height: 300, // Set height according to your preference
+          child: ColorPicker(
+            color: Colors.blue,
+            onChanged: (value) {
+              // Handle color change
+            },
+            initialPicker: Picker.paletteHue,
+          ),
+        ),
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +65,10 @@ class _PatternCreatorState extends State<PatternCreator> {
           children: <Widget>[
             GestureDetector(
               onTap: _switchValue ? _onButtonPressed : null,
-              child: Container(
-                padding: EdgeInsets.all(5),
-                // Add your button widget or content here
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '             ',
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Transform.scale(
