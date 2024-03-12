@@ -39,10 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.pattern),
             label: 'Patterns',
           ),
@@ -66,8 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _getBody(int index) {
     switch (index) {
       case 0:
-        return _buildHomeTab();
-      case 1:
         return Column(
           children: [
             SwitchAndButton(),
@@ -77,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SwitchAndButton()
           ],
         );
-      case 2:
+      case 1:
         return Row(
           children: [
             PatternCreator(),
@@ -89,17 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
             PatternCreator()
           ],
         );
-      case 3:
+      case 2:
         return _buildProfileTab();
       default:
         return Container();
     }
-  }
-
-  Widget _buildHomeTab() {
-    return Center(
-      child: Text('Main Page'),
-    );
   }
 
   Widget _buildCreatorTab() {
