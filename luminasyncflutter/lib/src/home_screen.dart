@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Lights'),
+        title: const Text('LuminaSYNC'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -79,8 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
             PatternCreator(),
             PatternCreator(),
             PatternCreator(),
-            PatternCreator(),
-            PatternCreator()
+           // PatternCreator()          
           ],
         );
       case 2:

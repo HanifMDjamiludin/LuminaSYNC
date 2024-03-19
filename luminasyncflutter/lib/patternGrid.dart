@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class PatternGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Another Page'),
+        title: Text('Available Patterns'),
       ),
       body: Center(
         child: GridView.count(
@@ -15,36 +16,24 @@ class PatternGrid extends StatelessWidget {
           mainAxisSpacing: 10,
           crossAxisCount: 2,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[100],
-              child: Center(child:const Text('Strobe')),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[200],
-              child: Center(child:const Text('Rainbow')),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[300],
-              child: Center(child:const Text('Pulse')),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[400],
-              child: Center(child:const Text('Fade in')),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[500],
-              child: Center(child:const Text('Fade out')),
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[600],
-              child: Center(child:const Text('Random')),
-            ),
+            GestureDetector(
+                onTap: () => print('aaaaaaaaaaaaaaaaaahh'),
+                child: Image.asset('assets/images/strobeLight.jpeg', fit: BoxFit.fill)),
+            GestureDetector(
+                onTap: () => print('aaaaaaaaaaaaaaaaaahh'),
+                child: Image.asset('assets/images/rainbow.jpeg', fit: BoxFit.fill,)),
+            GestureDetector(
+                onTap: () => print('aaaaaaaaaaaaaaaaaahh'),
+                child: Image.asset('assets/images/bubbles.jpeg', fit: BoxFit.fill)),
+            GestureDetector(
+                onTap: () => print('aaaaaaaaaaaaaaaaaahh'),
+                child: Image.asset('assets/images/ColorBlue.jpeg', fit: BoxFit.fill,)),
+                GestureDetector(
+                onTap: () => print('aaaaaaaaaaaaaaaaaahh'),
+                child: Image.asset('assets/images/red.jpeg', fit: BoxFit.fill)),
+            GestureDetector(
+                onTap: () => print('aaaaaaaaaaaaaaaaaahh'),
+                child: Image.asset('assets/images/ColorGreen.jpeg', fit: BoxFit.fill,)),
           ],
         ),
       ),
