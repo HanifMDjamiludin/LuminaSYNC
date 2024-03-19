@@ -64,11 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         return Column(
           children: [
-            SwitchAndButton(),
-            SwitchAndButton(),
-            SwitchAndButton(),
-            SwitchAndButton(),
-            SwitchAndButton()
+            SwitchAndButton(light: 1),
+            SwitchAndButton(light: 2),
+            SwitchAndButton(light: 3),
+            SwitchAndButton(light: 4),
+            SwitchAndButton(light: 5)
           ],
         );
       case 1:
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSettingsTab() {
-    return Center(child: SwitchAndButton());
+    return Center(child: SwitchAndButton(light: 1,));
   }
 
   Widget _buildProfileTab() {

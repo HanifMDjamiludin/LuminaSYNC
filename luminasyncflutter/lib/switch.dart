@@ -13,13 +13,18 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Switch and Button'),
         ),
-        body: SwitchAndButton(),
+        body: SwitchAndButton(
+          light: 0,
+        ),
       ),
     );
   }
 }
 
 class SwitchAndButton extends StatefulWidget {
+  final int light;
+  SwitchAndButton({required this.light});
+
   @override
   _SwitchAndButtonState createState() => _SwitchAndButtonState();
 }
@@ -51,7 +56,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
               child: Container(
                 padding: EdgeInsets.all(50),
                 child: Text(
-                  'Click Me',
+                  'Light ${widget.light} is $_switchValue',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
