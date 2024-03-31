@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:luminasyncflutter/add_devices.dart';
 import 'package:luminasyncflutter/creator.dart';
 import 'package:luminasyncflutter/switch.dart';
 
@@ -39,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: const [
           BottomNavigationBarItem(
+            icon: Icon(Icons.device_hub),
+            label: 'Devices',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.pattern),
             label: 'Patterns',
           ),
@@ -62,6 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _getBody(int index) {
     switch (index) {
       case 0:
+        return AddDeviceButton();
+
+      case 1:
         return Column(
           children: [
             SwitchAndButton(light: 1),
@@ -71,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SwitchAndButton(light: 5)
           ],
         );
-      case 1:
+      case 2:
         return Row(
           children: [
             PatternCreator(),
@@ -79,10 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
             PatternCreator(),
             PatternCreator(),
             PatternCreator(),
-           // PatternCreator()          
+            PatternCreator()
           ],
         );
-      case 2:
+      case 3:
         return _buildProfileTab();
       default:
         return Container();
@@ -96,7 +104,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSettingsTab() {
-    return Center(child: SwitchAndButton(light: 1,));
+    return Center(
+        child: SwitchAndButton(
+      light: 1,
+    ));
   }
 
   Widget _buildProfileTab() {

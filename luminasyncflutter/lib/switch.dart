@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/patternGrid.dart';
+import 'package:luminasyncflutter/newCreator.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,7 +38,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     print('Button clicked');
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PatternGrid()),
+      MaterialPageRoute(builder: (context) => NewCreator()),
     );
   }
 
