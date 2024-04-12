@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import the shared_preferences package
 import 'home_screen.dart';
+import 'api_service.dart';
 
 class SignInSignUpPage extends StatefulWidget {
   const SignInSignUpPage({Key? key}) : super(key: key);
@@ -15,11 +17,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     with SingleTickerProviderStateMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final ApiService _apiService = ApiService(); // Create an instance of ApiService
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  // final TextEditingController _phoneController = TextEditingController();
 
   late TabController _tabController;
   bool _isLoading = false;
@@ -43,13 +46,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     _emailController.dispose();
     _passwordController.dispose();
     _usernameController.dispose();
-    _phoneController.dispose();
+    // _phoneController.dispose();
     _tabController.dispose();
     super.dispose();
   }
 
   // Attempts to sign in with email and password using Firebase Authentication.
-  // If successful, resets controllers and navigates to the home screen.
+  // If successful, gets the user info by email using the API service,
+  // saves the information to shared preferences, resets controllers, and navigates to the home screen.
   Future<void> _signIn(BuildContext context) async {
     try {
       setState(() {
@@ -60,6 +64,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      // Get the user by email using the API service
+      final user = await _apiService.getUserByEmail(_emailController.text.trim());
+
+      // Save the user information to shared preferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString("user", user.toString());
 
       _resetControllers();
       _navigateToHomeScreen();
@@ -75,7 +86,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
   }
 
   // Attempts to create a new user with email and password using Firebase Authentication.
-  // If successful, resets controllers and navigates to the home screen.
+  // If successful, adds the user using the API service,
+  // saves the information to shared preferences, resets controllers, and navigates to the home screen.
   Future<void> _signUp(BuildContext context) async {
     try {
       setState(() {
@@ -86,6 +98,16 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      // Add the user using the API service
+      await _apiService.addUser(_usernameController.text.trim(), _emailController.text.trim());
+
+      // Get the user by email using the API service
+      final user = await _apiService.getUserByEmail(_emailController.text.trim());
+
+      // Save the user information to shared preferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString("user", user.toString());
 
       _resetControllers();
       _navigateToHomeScreen();
@@ -137,7 +159,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     _emailController.clear();
     _passwordController.clear();
     _usernameController.clear();
-    _phoneController.clear();
+    // _phoneController.clear();
   }
 
   //Navigation to homescreen with an animation
@@ -281,13 +303,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                                     const InputDecoration(labelText: 'Email'),
                                 keyboardType: TextInputType.emailAddress,
                               ),
-                              TextField(
-                                controller: _phoneController,
-                                key: const Key('phoneTextField'),
-                                decoration: const InputDecoration(
-                                    labelText: 'Phone Number'),
-                                keyboardType: TextInputType.phone,
-                              ),
+                              // TextField(
+                              //   controller: _phoneController,
+                              //   key: const Key('phoneTextField'),
+                              //   decoration: const InputDecoration(
+                              //       labelText: 'Phone Number'),
+                              //   keyboardType: TextInputType.phone,
+                              // ),
                               TextField(
                                 controller: _passwordController,
                                 key: const Key('registerPasswordTextField'),
