@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import the shared_preferences package
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart';
 import 'api_service.dart';
 
@@ -17,15 +18,15 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     with SingleTickerProviderStateMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final ApiService _apiService = ApiService(); // Create an instance of ApiService
+  final ApiService _apiService = ApiService();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  // final TextEditingController _phoneController = TextEditingController();
 
   late TabController _tabController;
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -40,20 +41,15 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     _googleSignIn.signInSilently();
   }
 
-  // Dispose of controllers and the tab controller when the widget is removed.
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _usernameController.dispose();
-    // _phoneController.dispose();
     _tabController.dispose();
     super.dispose();
   }
 
-  // Attempts to sign in with email and password using Firebase Authentication.
-  // If successful, gets the user info by email using the API service,
-  // saves the information to shared preferences, resets controllers, and navigates to the home screen.
   Future<void> _signIn(BuildContext context) async {
     try {
       setState(() {
@@ -65,10 +61,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
         password: _passwordController.text.trim(),
       );
 
-      // Get the user by email using the API service
-      final user = await _apiService.getUserByEmail(_emailController.text.trim());
+      final user =
+          await _apiService.getUserByEmail(_emailController.text.trim());
 
-      // Save the user information to shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString("user", user.toString());
 
@@ -78,6 +73,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       if (kDebugMode) {
         print('Error during sign-in: $e');
       }
+      setState(() {
+        _errorMessage = 'Incorrect email or password';
+      });
     } finally {
       setState(() {
         _isLoading = false;
@@ -85,9 +83,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     }
   }
 
-  // Attempts to create a new user with email and password using Firebase Authentication.
-  // If successful, adds the user using the API service,
-  // saves the information to shared preferences, resets controllers, and navigates to the home screen.
   Future<void> _signUp(BuildContext context) async {
     try {
       setState(() {
@@ -99,13 +94,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
         password: _passwordController.text.trim(),
       );
 
-      // Add the user using the API service
-      await _apiService.addUser(_usernameController.text.trim(), _emailController.text.trim());
+      await _apiService.addUser(
+          _usernameController.text.trim(), _emailController.text.trim());
 
-      // Get the user by email using the API service
-      final user = await _apiService.getUserByEmail(_emailController.text.trim());
+      final user =
+          await _apiService.getUserByEmail(_emailController.text.trim());
 
-      // Save the user information to shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString("user", user.toString());
 
@@ -115,6 +109,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       if (kDebugMode) {
         print('Error during sign-up: $e');
       }
+      setState(() {
+        _errorMessage = 'Error signing up. Please try again later.';
+      });
     } finally {
       setState(() {
         _isLoading = false;
@@ -122,8 +119,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     }
   }
 
-  // Signs in with Google using the Google Sign-In package and Firebase Authentication.
-  // Resets controllers and navigates to the home screen upon successful sign-in.
   Future<void> _signInWithGoogle() async {
     try {
       await _googleSignIn.signOut();
@@ -149,20 +144,22 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       if (kDebugMode) {
         print('Error during Google Sign-In: $e');
       }
+      setState(() {
+        _errorMessage = 'Error signing in with Google. Please try again later.';
+      });
     } finally {
-      _isLoading = false;
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
-  // Clears the text controllers for email, password, username, and phone number.
   void _resetControllers() {
     _emailController.clear();
     _passwordController.clear();
     _usernameController.clear();
-    // _phoneController.clear();
   }
 
-  //Navigation to homescreen with an animation
   void _navigateToHomeScreen() {
     Navigator.pushReplacement(
       context,
@@ -193,17 +190,18 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LuminaSYNC'),
-        backgroundColor: Colors.cyan[200],
+        title: Center(
+          // Center the text horizontally
+          child: Text(
+            'LuminaSYNC',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
+        backgroundColor: Colors.white,
         elevation: 0,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              'assets/images/logo.png',
-              width: 50.0,
-              height: 50.0,
-            ),
           )
         ],
         bottom: TabBar(
@@ -216,11 +214,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
         ),
       ),
       body: Container(
-        color: Colors.cyan[50],
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
-            color: Colors.white,
+            color: Colors.grey[200],
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -248,25 +246,15 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                                     labelText: 'Password'),
                                 obscureText: true,
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               ElevatedButton(
                                 onPressed: () => _signIn(context),
                                 child: const Text('Sign In'),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.cyan),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                  ),
-                                ),
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               ConstrainedBox(
-                                constraints: BoxConstraints(maxHeight: 50.0),
+                                constraints:
+                                    const BoxConstraints(maxHeight: 50.0),
                                 child: OutlinedButton(
                                   onPressed: () => _signInWithGoogle(),
                                   child: Row(
@@ -276,13 +264,22 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                                         'assets/images/google_logo.png',
                                         height: 24.0,
                                       ),
-                                      SizedBox(width: 8.0),
-                                      Text('Sign In with Google'),
+                                      const SizedBox(width: 8.0),
+                                      const Text('Sign In with Google'),
                                     ],
                                   ),
                                 ),
                               ),
-                              if (_isLoading) CircularProgressIndicator(),
+                              if (_isLoading) const CircularProgressIndicator(),
+                              if (_errorMessage != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    _errorMessage!,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
                             ],
                           ),
                         ),
@@ -303,13 +300,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                                     const InputDecoration(labelText: 'Email'),
                                 keyboardType: TextInputType.emailAddress,
                               ),
-                              // TextField(
-                              //   controller: _phoneController,
-                              //   key: const Key('phoneTextField'),
-                              //   decoration: const InputDecoration(
-                              //       labelText: 'Phone Number'),
-                              //   keyboardType: TextInputType.phone,
-                              // ),
                               TextField(
                                 controller: _passwordController,
                                 key: const Key('registerPasswordTextField'),
@@ -317,24 +307,22 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                                     labelText: 'Password'),
                                 obscureText: true,
                               ),
-                              SizedBox(height: 20.0),
+                              const SizedBox(height: 20.0),
                               ElevatedButton(
                                 onPressed: () => _signUp(context),
                                 child: const Text('Register'),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.cyan),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
+                              ),
+                              const SizedBox(height: 20.0),
+                              if (_isLoading) const CircularProgressIndicator(),
+                              if (_errorMessage != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    _errorMessage!,
+                                    style: TextStyle(color: Colors.red),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 20.0),
-                              if (_isLoading) CircularProgressIndicator(),
                             ],
                           ),
                         ),

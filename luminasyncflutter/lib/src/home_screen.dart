@@ -19,10 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LuminaSYNC'),
+        title: Center(
+          child: Text(
+            'LuminaSYNC',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: Icon(Icons.logout),
             onPressed: () {
               _handleLogout(context);
             },
@@ -48,7 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Patterns',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.pallet), label: 'Pattern Creator'),
+            icon: Icon(Icons.pallet),
+            label: 'Pattern Creator',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
@@ -95,19 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
       default:
         return Container();
     }
-  }
-
-  Widget _buildCreatorTab() {
-    return Center(
-      child: Text('creator Page'),
-    );
-  }
-
-  Widget _buildSettingsTab() {
-    return Center(
-        child: SwitchAndButton(
-      light: 1,
-    ));
   }
 
   Widget _buildProfileTab() {
