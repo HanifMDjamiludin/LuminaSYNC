@@ -73,26 +73,42 @@ Future<dynamic> addUser(String username, String email) async {
 }
 
 // Get a user's devices from the server
-  Future<List<dynamic>> getUserDevices(String id, String token) async {
-    final response = await http.get(
-      Uri.parse('$_baseUrl/users/$id/devices'),
-      headers: {'token': token},
-    );
-    return json.decode(response.body);
-  }
+Future<List<dynamic>> getUserDevices(String id) async {
+    try {
+        final response = await http.get(
+            Uri.parse('$_baseUrl/users/$id/devices'),
+        );
+        if (response.statusCode == 200) {
+            return json.decode(response.body);
+        } else if (response.statusCode == 401) {
+            throw Exception('Unauthorized');
+        } else {
+            throw Exception('Failed to get user devices: ${response.statusCode}');
+        }
+    } catch (e) {
+        throw Exception('Failed to connect to the server: $e');
+    }
+}
 
 // Add a new device to a user's account on the server
-  Future<dynamic> addUserDevice(String id, String token, Map<String, dynamic> deviceData) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/users/$id/devices'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'token': token,
-      },
-      body: jsonEncode(deviceData),
-    );
-    return json.decode(response.body);
-  }
+Future<dynamic> addUserDevice(String id, Map<String, dynamic> deviceData) async {
+    try {
+        final response = await http.post(
+            Uri.parse('$_baseUrl/users/$id/devices'),
+            headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(deviceData),
+        );
+        if (response.statusCode == 201) {
+            return json.decode(response.body);
+        } else {
+            throw Exception('Failed to add user device: ${response.statusCode}');
+        }
+    } catch (e) {
+        throw Exception('Failed to connect to the server: $e');
+    }
+}
 
 // Publish a command to a device on the user's account
   Future<String> publishCommand(String deviceID, String command) async {
