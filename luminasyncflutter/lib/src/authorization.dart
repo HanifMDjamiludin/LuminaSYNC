@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart';
 import 'api_service.dart';
+import 'dart:convert';
 
 class SignInSignUpPage extends StatefulWidget {
   const SignInSignUpPage({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     super.dispose();
   }
 
-  Future<void> _signIn(BuildContext context) async {
+    Future<void> _signIn(BuildContext context) async {
     try {
       setState(() {
         _isLoading = true;
@@ -61,11 +62,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
         password: _passwordController.text.trim(),
       );
 
-      final user =
-          await _apiService.getUserByEmail(_emailController.text.trim());
-
+      final user = await _apiService.getUserByEmail(_emailController.text.trim());
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString("user", user.toString());
+      await prefs.setString("user", jsonEncode(user)); // Encode user data to JSON
 
       _resetControllers();
       _navigateToHomeScreen();
@@ -97,11 +96,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       await _apiService.addUser(
           _usernameController.text.trim(), _emailController.text.trim());
 
-      final user =
-          await _apiService.getUserByEmail(_emailController.text.trim());
-
+      final user = await _apiService.getUserByEmail(_emailController.text.trim());
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString("user", user.toString());
+      await prefs.setString("user", jsonEncode(user)); // Encode user data to JSON
 
       _resetControllers();
       _navigateToHomeScreen();
@@ -118,6 +115,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       });
     }
   }
+
 
   Future<void> _signInWithGoogle() async {
     try {

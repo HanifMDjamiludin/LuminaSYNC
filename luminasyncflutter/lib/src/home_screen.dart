@@ -4,6 +4,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luminasyncflutter/add_devices.dart';
 import 'package:luminasyncflutter/creator.dart';
 import 'package:luminasyncflutter/switch.dart';
+import 'package:luminasyncflutter/device_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -117,6 +120,27 @@ class _HomeScreenState extends State<HomeScreen> {
           Text('Welcome $username'),
           const SizedBox(height: 16.0),
           Text('User ID: $userId'),
+          const SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              String? userDetails = prefs.getString('user');
+              if (userDetails != null) {
+                Map<String, dynamic> user = jsonDecode(userDetails);
+                String userId = user['userid'].toString();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DeviceManagerPage(userId: userId)),
+                );
+              } else {
+                // Handle error or prompt login
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("User not logged in. Please log in to manage devices."))
+                );
+              }
+            },
+            child: Text('Manage Devices'),
+          ),                    
         ],
       ),
     );
