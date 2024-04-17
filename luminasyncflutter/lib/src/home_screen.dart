@@ -69,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _handleLogout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
     Navigator.pushReplacementNamed(context, '/');
@@ -108,18 +110,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildProfileTab() {
-    // Replace these placeholders with actual user information
-    final String username = 'JohnDoe';
-    final String userId = '1234';
+    final user = FirebaseAuth.instance.currentUser;
+    final String displayName = user?.displayName ?? 'User';
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Welcome $username'),
-          const SizedBox(height: 16.0),
-          Text('User ID: $userId'),
+          Text('Welcome $displayName'),
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () async {
@@ -130,17 +129,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 String userId = user['userid'].toString();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DeviceManagerPage(userId: userId)),
+                  MaterialPageRoute(
+                      builder: (context) => DeviceManagerPage(userId: userId)),
                 );
               } else {
                 // Handle error or prompt login
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("User not logged in. Please log in to manage devices."))
-                );
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        "User not logged in. Please log in to manage devices.")));
               }
             },
             child: Text('Manage Devices'),
-          ),                    
+          ),
         ],
       ),
     );
