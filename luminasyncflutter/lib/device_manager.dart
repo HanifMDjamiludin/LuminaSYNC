@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:luminasyncflutter/device_details_page.dart';
 
 class DeviceManagerPage extends StatefulWidget {
   final String userId;
@@ -45,8 +46,22 @@ class _DeviceManagerPageState extends State<DeviceManagerPage> {
                 title: Text(deviceName),
                 subtitle: Text('Location: $deviceLocation'),
                 trailing: Icon(Icons.edit),
-                onTap: () {
-                    // Handle device tap here
+                onTap: () async {
+                final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                    builder: (context) => DeviceDetailsPage(
+                        device: snapshot.data![index],
+                        userId: widget.userId,
+                    ),
+                    ),
+                );
+                if (result == 'update') { // If the user updated the device
+                    setState(() {
+                    // This reloads the device list by re-fetching the devices
+                    _devicesFuture = ApiService().getUserDevices(widget.userId); // Fetch devices again
+                    });
+                }
                 },
                 );
             },

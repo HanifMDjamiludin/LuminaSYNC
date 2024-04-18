@@ -121,4 +121,76 @@ Future<dynamic> addUserDevice(String id, Map<String, dynamic> deviceData) async 
     );
     return response.body;
   }
+
+// Delete a device for a user
+Future<dynamic> deleteDevice(String userId, String deviceId) async {
+    try {
+        final response = await http.delete(
+            Uri.parse('$_baseUrl/users/$userId/devices/$deviceId'),
+        );
+        if (response.statusCode == 200) {
+            return json.decode(response.body);
+        } else if (response.statusCode == 401) {
+            throw Exception('Unauthorized');
+        } else if (response.statusCode == 404) {
+            throw Exception('Device not found');
+        } else {
+            throw Exception('Failed to delete device: ${response.statusCode}');
+        }
+    } catch (e) {
+        throw Exception('Failed to connect to the server: $e');
+    }
+}
+
+// Modify the name of a device for a user
+Future<dynamic> modifyDeviceName(String userId, String deviceId, String deviceName) async {
+    try {
+        final response = await http.put(
+            Uri.parse('$_baseUrl/users/$userId/devices/$deviceId/name'),
+            headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, String>{
+                'deviceName': deviceName,
+            }),
+        );
+        if (response.statusCode == 200) {
+            return json.decode(response.body);
+        } else if (response.statusCode == 401) {
+            throw Exception('Unauthorized');
+        } else if (response.statusCode == 404) {
+            throw Exception('Device not found');
+        } else {
+            throw Exception('Failed to modify device name: ${response.statusCode}');
+        }
+    } catch (e) {
+        throw Exception('Failed to connect to the server: $e');
+    }
+}
+
+// Modify the location of a device for a user
+Future<dynamic> modifyDeviceLocation(String userId, String deviceId, String deviceLocation) async {
+    try {
+        final response = await http.put(
+            Uri.parse('$_baseUrl/users/$userId/devices/$deviceId/location'),
+            headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, String>{
+                'deviceLocation': deviceLocation,
+            }),
+        );
+        if (response.statusCode == 200) {
+            return json.decode(response.body);
+        } else if (response.statusCode == 401) {
+            throw Exception('Unauthorized');
+        } else if (response.statusCode == 404) {
+            throw Exception('Device not found');
+        } else {
+            throw Exception('Failed to modify device location: ${response.statusCode}');
+        }
+    } catch (e) {
+        throw Exception('Failed to connect to the server: $e');
+    }
+}
 }
