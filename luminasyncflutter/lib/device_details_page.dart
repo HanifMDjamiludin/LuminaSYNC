@@ -65,6 +65,17 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
     }
   }
 
+//Make lights blink white for 5 seconds
+void _identifyDevice() async {
+    try {
+        String deviceID = widget.device['deviceid'];
+        String result = await _apiService.identifyDevice(deviceID);
+        _showError(result);
+    } catch (e) {
+        _showError(e.toString());
+    }
+}
+
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
@@ -98,6 +109,10 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
             ElevatedButton(
             onPressed: _updateDevice,
             child: Text('Update Device Info'),
+            ),
+            ElevatedButton(
+            onPressed: _identifyDevice,
+            child: Text('Identify Device'),
             ),
           ],
         ),

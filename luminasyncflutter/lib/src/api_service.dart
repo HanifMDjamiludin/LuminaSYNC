@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
 class ApiService {
   final String _baseUrl = 'http://34.145.206.196:3000'; // Backend API URL
@@ -110,17 +111,21 @@ Future<dynamic> addUserDevice(String id, Map<String, dynamic> deviceData) async 
     }
 }
 
-// Publish a command to a device on the user's account
-  Future<String> publishCommand(String deviceID, String command) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/publish/$deviceID'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({'command': command}),
-    );
+Future<String> publishCommand(String deviceID, String command) async {
+  final response = await http.post(
+    Uri.parse('$_baseUrl/publish/$deviceID'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({'deviceID': deviceID, 'command': command}),
+  );
+
+  if (response.statusCode == 200 && response.body == "Message published") {
     return response.body;
+  } else {
+    throw Exception('Failed to publish command');
   }
+}
 
 // Delete a device for a user
 Future<dynamic> deleteDevice(String userId, String deviceId) async {
@@ -193,4 +198,33 @@ Future<dynamic> modifyDeviceLocation(String userId, String deviceId, String devi
         throw Exception('Failed to connect to the server: $e');
     }
 }
+
+// Identify a device by making its lights blink white for 5 seconds
+Future<String> identifyDevice(String deviceID) async {
+  const String white = '''["FFFFFF"]''';  // White color in hex
+  const String off = '''["000000"]''';    // Turn off (black)
+  const Duration blinkDuration = Duration(seconds: 1);  // Each blink will last 1 second
+  const int numBlinks = 5;  // Total number of state changes for 5 seconds of blinking
+
+  print('Identifying device $deviceID');
+
+    try {
+        // Turn off the device first
+        await publishCommand(deviceID, off);
+        await Future.delayed(Duration(seconds: 1));  // Wait 1 second before starting the blinking
+    
+        // Blink the lights white for 5 seconds
+        for (int i = 0; i < numBlinks; i++) {
+        await publishCommand(deviceID, white);
+        await Future.delayed(blinkDuration);
+        await publishCommand(deviceID, off);
+        await Future.delayed(blinkDuration);
+        }
+    
+        return 'Device identified';
+    } catch (e) {
+        throw Exception('Failed to identify device: $e');
+    }
+}
+
 }
