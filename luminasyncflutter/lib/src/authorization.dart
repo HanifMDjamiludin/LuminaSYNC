@@ -51,7 +51,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
     super.dispose();
   }
 
-    Future<void> _signIn(BuildContext context) async {
+  Future<void> _signIn(BuildContext context) async {
     try {
       setState(() {
         _isLoading = true;
@@ -62,9 +62,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
         password: _passwordController.text.trim(),
       );
 
-      final user = await _apiService.getUserByEmail(_emailController.text.trim());
+      final user =
+          await _apiService.getUserByEmail(_emailController.text.trim());
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString("user", jsonEncode(user)); // Encode user data to JSON
+      await prefs.setString(
+          "user", jsonEncode(user)); // Encode user data to JSON
 
       _resetControllers();
       _navigateToHomeScreen();
@@ -96,9 +98,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       await _apiService.addUser(
           _usernameController.text.trim(), _emailController.text.trim());
 
-      final user = await _apiService.getUserByEmail(_emailController.text.trim());
+      final user =
+          await _apiService.getUserByEmail(_emailController.text.trim());
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString("user", jsonEncode(user)); // Encode user data to JSON
+      await prefs.setString(
+          "user", jsonEncode(user)); // Encode user data to JSON
 
       _resetControllers();
       _navigateToHomeScreen();
@@ -115,7 +119,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
       });
     }
   }
-
 
   Future<void> _signInWithGoogle() async {
     try {
@@ -187,153 +190,164 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          // Center the text horizontally
-          child: Text(
-            'LuminaSYNC',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          title: Center(
+            child: Text(
+              'LuminaSYNC',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+            )
+          ],
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Sign In'),
+              Tab(text: 'Register'),
+            ],
+            indicatorColor: Colors.white,
           ),
         ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-          )
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Sign In'),
-            Tab(text: 'Register'),
-          ],
-          indicatorColor: Colors.white,
-        ),
-      ),
-      body: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Card(
-            color: Colors.grey[200],
-            elevation: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextField(
-                                controller: _emailController,
-                                key: const Key('emailTextField'),
-                                decoration:
-                                    const InputDecoration(labelText: 'Email'),
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                              TextField(
-                                controller: _passwordController,
-                                key: const Key('passwordTextField'),
-                                decoration: const InputDecoration(
-                                    labelText: 'Password'),
-                                obscureText: true,
-                              ),
-                              const SizedBox(height: 20.0),
-                              ElevatedButton(
-                                onPressed: () => _signIn(context),
-                                child: const Text('Sign In'),
-                              ),
-                              const SizedBox(height: 20.0),
-                              ConstrainedBox(
-                                constraints:
-                                    const BoxConstraints(maxHeight: 50.0),
-                                child: OutlinedButton(
-                                  onPressed: () => _signInWithGoogle(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/google_logo.png',
-                                        height: 24.0,
-                                      ),
-                                      const SizedBox(width: 8.0),
-                                      const Text('Sign In with Google'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              if (_isLoading) const CircularProgressIndicator(),
-                              if (_errorMessage != null)
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
-                                    _errorMessage!,
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextField(
-                                controller: _usernameController,
-                                key: const Key('usernameTextField'),
-                                decoration: const InputDecoration(
-                                    labelText: 'Username'),
-                              ),
-                              TextField(
-                                controller: _emailController,
-                                key: const Key('registerEmailTextField'),
-                                decoration:
-                                    const InputDecoration(labelText: 'Email'),
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                              TextField(
-                                controller: _passwordController,
-                                key: const Key('registerPasswordTextField'),
-                                decoration: const InputDecoration(
-                                    labelText: 'Password'),
-                                obscureText: true,
-                              ),
-                              const SizedBox(height: 20.0),
-                              ElevatedButton(
-                                onPressed: () => _signUp(context),
-                                child: const Text('Register'),
-                              ),
-                              const SizedBox(height: 20.0),
-                              if (_isLoading) const CircularProgressIndicator(),
-                              if (_errorMessage != null)
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
-                                    _errorMessage!,
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+        body: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.grey[200]!,
+                      const Color.fromARGB(255, 192, 192, 192)
+                    ],
                   ),
-                ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextField(
+                                    controller: _emailController,
+                                    key: const Key('emailTextField'),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Email'),
+                                    keyboardType: TextInputType.emailAddress,
+                                  ),
+                                  TextField(
+                                    controller: _passwordController,
+                                    key: const Key('passwordTextField'),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Password'),
+                                    obscureText: true,
+                                  ),
+                                  const SizedBox(height: 24.0),
+                                  ElevatedButton(
+                                    onPressed: () => _signIn(context),
+                                    child: const Text('Sign In'),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  ConstrainedBox(
+                                    constraints:
+                                        const BoxConstraints(maxHeight: 50.0),
+                                    child: OutlinedButton(
+                                      onPressed: () => _signInWithGoogle(),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text('Sign in with '),
+                                          Image.asset(
+                                            'assets/images/google_logo.png',
+                                            height: 24.0,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  if (_isLoading)
+                                    const CircularProgressIndicator(),
+                                  if (_errorMessage != null)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Text(
+                                        _errorMessage!,
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextField(
+                                    controller: _usernameController,
+                                    key: const Key('usernameTextField'),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Username'),
+                                  ),
+                                  TextField(
+                                    controller: _emailController,
+                                    key: const Key('registerEmailTextField'),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Email'),
+                                    keyboardType: TextInputType.emailAddress,
+                                  ),
+                                  TextField(
+                                    controller: _passwordController,
+                                    key: const Key('registerPasswordTextField'),
+                                    decoration: const InputDecoration(
+                                        labelText: 'Password'),
+                                    obscureText: true,
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  ElevatedButton(
+                                    onPressed: () => _signUp(context),
+                                    child: const Text('Register'),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  if (_isLoading)
+                                    const CircularProgressIndicator(),
+                                  if (_errorMessage != null)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Text(
+                                        _errorMessage!,
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
