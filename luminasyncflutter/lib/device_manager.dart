@@ -3,6 +3,7 @@ import 'package:luminasyncflutter/src/api_service.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:luminasyncflutter/device_details_page.dart';
+import 'package:luminasyncflutter/device_discovery_page.dart';
 
 class DeviceManagerPage extends StatefulWidget {
   final String userId;
@@ -27,6 +28,20 @@ class _DeviceManagerPageState extends State<DeviceManagerPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Device Manager"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                //   builder: (context) => DeviceDiscoveryPage(userId: widget.userId), //Add this back later
+                builder: (context) => DeviceDiscoveryPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<dynamic>>(
         future: _devicesFuture,
