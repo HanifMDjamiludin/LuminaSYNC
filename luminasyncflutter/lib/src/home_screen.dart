@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luminasyncflutter/add_devices.dart';
 import 'package:luminasyncflutter/creator.dart';
+import 'package:luminasyncflutter/newCreator.dart';
 import 'package:luminasyncflutter/switch.dart';
 import 'package:luminasyncflutter/device_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,9 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _getBody(int index) {
     switch (index) {
       case 0:
-        return AddDeviceButton();
-
-      case 1:
         return Column(
           children: [
             SwitchAndButton(light: 1),
@@ -91,6 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
             SwitchAndButton(light: 5)
           ],
         );
+
+      case 1:
+        return NewCreator();
+      //AddDeviceButton();
       case 2:
         return Row(
           children: [

@@ -38,8 +38,8 @@ class _AddDeviceButtonState extends State<AddDeviceButton> {
               });
             },
             child: Container(
-              width: 160,
-              height: 160,
+              width: 80,
+              height: 80,
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(20),
@@ -47,28 +47,27 @@ class _AddDeviceButtonState extends State<AddDeviceButton> {
               child: Center(
                 child: Text(
                   '+',
-                  style: TextStyle(fontSize: 100, color: Colors.white),
+                  style: TextStyle(fontSize: 50, color: Colors.white),
                 ),
               ),
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           // Render a red circle with text for each position in the list
           for (var i = 0; i < circlePositions.length; i++)
-            Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red,
-              ),
-              margin: EdgeInsets.all(8),
-              child: Center(
-                child: Text(
-                  'Device ${deviceNumbers[i]}', // Text showing device number
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
+            GridView.count(
+              shrinkWrap: true,
+              primary: false,
+          padding: const EdgeInsets.all(10),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          crossAxisCount: 2,
+          children: <Widget>[
+    Container(
+      padding: const EdgeInsets.all(8),
+      color: Colors.teal[100],
+    ),]
+
             ),
         ],
       ),

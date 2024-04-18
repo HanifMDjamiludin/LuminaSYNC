@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:luminasyncflutter/creator.dart';
 import 'package:luminasyncflutter/patternGrid.dart';
 import 'package:luminasyncflutter/newCreator.dart';
+import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,11 +36,24 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   bool _switchValue = false;
 
   void _onButtonPressed() {
-    // Do something when the button is pressed
-    print('Button clicked');
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NewCreator()),
+showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick a Color'),
+          content: Container(
+            width: double.maxFinite, // Set width to fill available space
+            height: 600, // Set height according to your preference
+            child: ColorPicker(
+              color: Colors.blue,
+              onChanged: (value) {
+                // Handle color change
+              },
+              initialPicker: Picker.paletteHue,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -57,7 +72,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
               child: Container(
                 padding: EdgeInsets.all(50),
                 child: Text(
-                  'Light ${widget.light} is $_switchValue',
+                  'Device ${widget.light} is $_switchValue',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
