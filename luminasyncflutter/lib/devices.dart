@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
 import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
-import 'package:luminasyncflutter/switch.dart';
+import 'package:luminasyncflutter/switchButton.dart';
 
 class DeviceManagerScreen extends StatefulWidget {
   final String userId;

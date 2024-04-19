@@ -18,27 +18,37 @@ class PresetPatterns extends StatelessWidget {
           children: <Widget>[
     Container(
       padding: const EdgeInsets.all(8),
-      color: Colors.teal[100],
+      color: Colors.red[100],
+      child: GestureDetector(onTap: () => print("Pattern selected"),),
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      color: Colors.teal[200],
+      color: Colors.red[200],
+      child: GestureDetector(onTap: () => print("Pattern selected"),),
+
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      color: Colors.teal[300],
+      color: Colors.red[300],
+      child: GestureDetector(onTap: () => print("Pattern selected"),),
     ),
     Container(
       padding: const EdgeInsets.all(8),
-      color: Colors.teal[400],
+      color: Colors.red[400],
+      child: GestureDetector(onTap: () => print("Pattern selected"),),
+
     ),
     Container(
       padding: const EdgeInsets.all(8),
       color: Colors.teal[500],
+      child: GestureDetector(onTap: () => print("Pattern selected"),),
+
     ),
     Container(
       padding: const EdgeInsets.all(8),
       color: Colors.teal[600],
+      child: GestureDetector(onTap: () => print("Pattern selected"),),
+
     ),
   ],
         ),
