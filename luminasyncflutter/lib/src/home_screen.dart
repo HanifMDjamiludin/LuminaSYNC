@@ -6,6 +6,7 @@ import 'package:luminasyncflutter/newCreator.dart';
 import 'package:luminasyncflutter/devices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:luminasyncflutter/buildProfileTab.dart';
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,9 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _userId = prefs.getString('userId');
-    });
+    String? userDetails = prefs.getString('user');
+    if (userDetails != null) {
+      Map<String, dynamic> user = jsonDecode(userDetails);
+      String userId = user['userid'].toString();
+      setState(() {
+        _userId = userId;
+      });
+    }
   }
 
   @override
