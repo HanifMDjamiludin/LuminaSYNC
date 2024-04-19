@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
-import 'package:luminasyncflutter/device_details_page.dart';
-import 'package:luminasyncflutter/device_discovery_page.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class DeviceManagerScreen extends StatefulWidget {
   final String userId;
@@ -14,6 +13,7 @@ class DeviceManagerScreen extends StatefulWidget {
 
 class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
   late Future<List<dynamic>> _devicesFuture;
+  List<Color> _deviceColors = [];
 
   @override
   void initState() {
@@ -25,21 +25,7 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Device Manager"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  //   builder: (context) => DeviceDiscoveryPage(userId: widget.userId), //Add this back later
-                  builder: (context) => DeviceDiscoveryPage(),
-                ),
-              );
-            },
-          ),
-        ],
+        title: Text("MY DEVICES"),
       ),
       body: FutureBuilder<List<dynamic>>(
         future: _devicesFuture,
@@ -48,38 +34,45 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
             if (snapshot.hasError) {
               return Text("Error: ${snapshot.error}");
             }
+            _deviceColors =
+                List<Color>.filled(snapshot.data!.length, Colors.white);
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 var device = snapshot.data![index];
-                String deviceName = device['devicename'] as String? ??
-                    'Unknown Device'; //Handle null device name
+                String deviceName =
+                    device['devicename'] as String? ?? 'Unknown Device';
                 String deviceLocation = device['devicelocation'] as String? ??
-                    'No Location Specified'; //Handle null device location
+                    'No Location Specified';
 
-                return ListTile(
-                  title: Text(deviceName),
-                  subtitle: Text('Location: $deviceLocation'),
-                  trailing: Icon(Icons.edit),
-                  onTap: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DeviceDetailsPage(
-                          device: snapshot.data![index],
-                          userId: widget.userId,
-                        ),
-                      ),
-                    );
-                    if (result == 'update') {
-                      // If the user updated the device
-                      setState(() {
-                        // This reloads the device list by re-fetching the devices
-                        _devicesFuture = ApiService().getUserDevices(
-                            widget.userId); // Fetch devices again
-                      });
-                    }
+                return MaterialButton(
+                  onPressed: () {
+                    _showColorPicker(context, index);
                   },
+                  padding: EdgeInsets.all(5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1),
+                  ),
+                  color: _deviceColors[index],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          deviceName,
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.left, // Align text to left
+                        ),
+                        SizedBox(height: 4.0),
+                        Text(
+                          'Location: $deviceLocation',
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             );
@@ -88,6 +81,40 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
           }
         },
       ),
+    );
+  }
+
+  void _showColorPicker(BuildContext context, int index) {
+    Color currentColor = _deviceColors[index]; // Initial color
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick a color'),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: currentColor,
+              onColorChanged: (Color color) {
+                setState(() {
+                  currentColor = color;
+                });
+              },
+              pickerAreaHeightPercent: 0.6,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                setState(() {
+                  _deviceColors[index] = currentColor; // Update color
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
