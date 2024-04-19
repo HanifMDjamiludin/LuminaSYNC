@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luminasyncflutter/creator.dart';
-import 'package:luminasyncflutter/newCreator.dart';
+import 'package:luminasyncflutter/patterns.dart';
 import 'package:luminasyncflutter/devices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:luminasyncflutter/buildProfileTab.dart';
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
       case 1:
-        return NewCreator();
+        return PresetPatterns();
       case 2:
         return Row(
           children: [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-class NewCreator extends StatelessWidget {
+class PresetPatterns extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
