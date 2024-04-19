@@ -13,8 +13,15 @@ class DeviceManagerScreen extends StatefulWidget {
 }
 
 class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
+  Color _chosenColor = Colors.blue;
   late Future<List<dynamic>> _devicesFuture;
   List<Color> _deviceColors = [];
+
+  void updateChosenColor(Color color) {
+    setState() {
+      _chosenColor = color;
+    }
+  }
 
   @override
   void initState() {
@@ -47,7 +54,7 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
                     'No Location Specified';
 
                 return SwitchAndButton(
-                    name: deviceName, location: deviceLocation);
+                    name: deviceName, location: deviceLocation, updateChosenColor: updateChosenColor,);
               },
             );
           } else {
@@ -55,40 +62,6 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
           }
         },
       ),
-    );
-  }
-
-  void _showColorPicker(BuildContext context, int index) {
-    Color currentColor = _deviceColors[index]; // Initial color
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Pick a color'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: currentColor,
-              onColorChanged: (Color color) {
-                setState(() {
-                  currentColor = color;
-                });
-              },
-              pickerAreaHeightPercent: 0.6,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                setState(() {
-                  _deviceColors[index] = currentColor; // Update color
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/creator.dart';
 import 'package:luminasyncflutter/patternGrid.dart';
@@ -19,6 +21,9 @@ class MyApp extends StatelessWidget {
         body: SwitchAndButton(
           name: '',
           location: '',
+          updateChosenColor: (Color color) {
+            
+          },
         ),
       ),
     );
@@ -28,7 +33,11 @@ class MyApp extends StatelessWidget {
 class SwitchAndButton extends StatefulWidget {
   final String name;
   final String location;
-  SwitchAndButton({required this.name, required this.location});
+  final void Function(Color) updateChosenColor;
+  SwitchAndButton(
+      {required this.name,
+      required this.location,
+      required this.updateChosenColor});
 
   @override
   _SwitchAndButtonState createState() => _SwitchAndButtonState();
@@ -36,6 +45,7 @@ class SwitchAndButton extends StatefulWidget {
 
 class _SwitchAndButtonState extends State<SwitchAndButton> {
   bool _switchValue = false;
+  Color _chosenColor = Colors.blue;
 
   void _onButtonPressed() {
     showDialog(
@@ -47,8 +57,10 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
             width: double.maxFinite, // Set width to fill available space
             height: 600, // Set height according to your preference
             child: ColorPicker(
-              color: Colors.blue,
               onChanged: (value) {
+                setState(() {
+                  _chosenColor = value;
+                });
                 // Handle color change
               },
               initialPicker: Picker.paletteHue,
@@ -63,7 +75,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          color: _switchValue ? Colors.blue : Colors.grey,
+          color: _switchValue ? _chosenColor : Colors.grey,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
