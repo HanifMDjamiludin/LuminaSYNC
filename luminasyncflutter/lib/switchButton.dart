@@ -16,9 +16,7 @@ class MyApp extends StatelessWidget {
         body: SwitchAndButton(
           name: '',
           location: '',
-          updateChosenColor: (Color color) {
-            
-          },
+          updateChosenColor: (Color color) {},
         ),
       ),
     );
@@ -54,6 +52,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
             child: ColorPicker(
               onChanged: (value) {
                 setState(() {
+                  print(value.value.toRadixString(16));
                   _chosenColor = value;
                 });
                 // Handle color change
