@@ -225,7 +225,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.grey[200]!,
+                      Colors.grey[100]!,
                       const Color.fromARGB(255, 192, 192, 192)
                     ],
                   ),
