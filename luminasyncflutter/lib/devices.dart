@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
 import 'package:luminasyncflutter/device_details_page.dart';
 import 'package:luminasyncflutter/device_discovery_page.dart';
+import 'package:luminasyncflutter/switch.dart';
 
 class DeviceManagerScreen extends StatefulWidget {
   final String userId;
@@ -57,30 +58,8 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
                 String deviceLocation = device['devicelocation'] as String? ??
                     'No Location Specified'; //Handle null device location
 
-                return ListTile(
-                  title: Text(deviceName),
-                  subtitle: Text('Location: $deviceLocation'),
-                  trailing: Icon(Icons.edit),
-                  onTap: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DeviceDetailsPage(
-                          device: snapshot.data![index],
-                          userId: widget.userId,
-                        ),
-                      ),
-                    );
-                    if (result == 'update') {
-                      // If the user updated the device
-                      setState(() {
-                        // This reloads the device list by re-fetching the devices
-                        _devicesFuture = ApiService().getUserDevices(
-                            widget.userId); // Fetch devices again
-                      });
-                    }
-                  },
-                );
+                return SwitchAndButton(
+                    name: deviceName, location: deviceLocation);
               },
             );
           } else {

@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
           title: Text('Switch and Button'),
         ),
         body: SwitchAndButton(
-          light: 0,
+          name: '',
+          location: '',
         ),
       ),
     );
@@ -25,8 +26,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SwitchAndButton extends StatefulWidget {
-  final int light;
-  SwitchAndButton({required this.light});
+  final String name;
+  final String location;
+  SwitchAndButton({required this.name, required this.location});
 
   @override
   _SwitchAndButtonState createState() => _SwitchAndButtonState();
@@ -36,7 +38,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   bool _switchValue = false;
 
   void _onButtonPressed() {
-showDialog(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -72,7 +74,7 @@ showDialog(
               child: Container(
                 padding: EdgeInsets.all(50),
                 child: Text(
-                  'Device ${widget.light} is $_switchValue',
+                  '${widget.name} in ${widget.location} is ${_switchValue ? 'on' : 'off'}',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
