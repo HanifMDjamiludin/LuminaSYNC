@@ -111,19 +111,90 @@ Future<dynamic> addUserDevice(String id, Map<String, dynamic> deviceData) async 
     }
 }
 
-Future<String> publishCommand(String deviceID, String command) async {
+/*
+Deprecated. Use the setPower, setColor, setBrightness, and setEffect methods instead.
+*/
+// Future<String> publishCommand(String deviceID, String command) async {
+//   final response = await http.post(
+//     Uri.parse('$_baseUrl/publish/$deviceID'),
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     },
+//     body: jsonEncode({'deviceID': deviceID, 'command': command}),
+//   );
+
+//   if (response.statusCode == 200 && response.body == "Message published") {
+//     return response.body;
+//   } else {
+//     throw Exception('Failed to publish command');
+//   }
+// }
+
+// Method for setting color
+Future<String> setColor(String deviceID, String color) async {
   final response = await http.post(
-    Uri.parse('$_baseUrl/publish/$deviceID'),
+    Uri.parse('$_baseUrl/devices/$deviceID/color'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode({'deviceID': deviceID, 'command': command}),
+    body: jsonEncode({'color': color}),
   );
 
   if (response.statusCode == 200 && response.body == "Message published") {
     return response.body;
   } else {
-    throw Exception('Failed to publish command');
+    throw Exception('Failed to set color');
+  }
+}
+
+// Method for setting power
+Future<String> setPower(String deviceID, String power) async {
+  final response = await http.post(
+    Uri.parse('$_baseUrl/devices/$deviceID/power'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({'power': power}),
+  );
+
+  if (response.statusCode == 200 && response.body == "Message published") {
+    return response.body;
+  } else {
+    throw Exception('Failed to set power');
+  }
+}
+
+// Method for setting brightness
+Future<String> setBrightness(String deviceID, String brightness) async {
+  final response = await http.post(
+    Uri.parse('$_baseUrl/devices/$deviceID/brightness'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({'brightness': brightness}),
+  );
+
+  if (response.statusCode == 200 && response.body == "Message published") {
+    return response.body;
+  } else {
+    throw Exception('Failed to set brightness');
+  }
+}
+
+// Method for setting effect
+Future<String> setEffect(String deviceID, String effect) async {
+  final response = await http.post(
+    Uri.parse('$_baseUrl/devices/$deviceID/effect'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({'effect': effect}),
+  );
+
+  if (response.statusCode == 200 && response.body == "Message published") {
+    return response.body;
+  } else {
+    throw Exception('Failed to set effect');
   }
 }
 
@@ -201,8 +272,8 @@ Future<dynamic> modifyDeviceLocation(String userId, String deviceId, String devi
 
 // Identify a device by making its lights blink white for 5 seconds
 Future<String> identifyDevice(String deviceID) async {
-  const String white = '''["FFFFFF"]''';  // White color in hex
-  const String off = '''["000000"]''';    // Turn off (black)
+  const String white = "FFFFFF";  // White color in hex
+  const String off = "000000";    // Turn off (black)
   const Duration blinkDuration = Duration(seconds: 1);  // Each blink will last 1 second
   const int numBlinks = 5;  // Total number of state changes for 5 seconds of blinking
 
@@ -210,14 +281,14 @@ Future<String> identifyDevice(String deviceID) async {
 
     try {
         // Turn off the device first
-        await publishCommand(deviceID, off);
+        await setColor(deviceID, off);
         await Future.delayed(Duration(seconds: 1));  // Wait 1 second before starting the blinking
     
         // Blink the lights white for 5 seconds
         for (int i = 0; i < numBlinks; i++) {
-        await publishCommand(deviceID, white);
+        await setColor(deviceID, white);
         await Future.delayed(blinkDuration);
-        await publishCommand(deviceID, off);
+        await setColor(deviceID, off);
         await Future.delayed(blinkDuration);
         }
     
