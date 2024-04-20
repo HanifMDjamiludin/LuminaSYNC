@@ -83,7 +83,6 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
               setState(() {
                 _switchValue = value;
                 if (value) {
-                  print('Current device ID: ${widget.deviceId}');
                   _setDevicePower('on');
                 } else {
                   _setDevicePower('off');
