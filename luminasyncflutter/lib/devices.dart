@@ -13,15 +13,7 @@ class DeviceManagerScreen extends StatefulWidget {
 }
 
 class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
-  Color _chosenColor = Colors.blue;
   late Future<List<dynamic>> _devicesFuture;
-  List<Color> _deviceColors = [];
-
-  void updateChosenColor(Color color) {
-    setState() {
-      _chosenColor = color;
-    }
-  }
 
   @override
   void initState() {
@@ -42,8 +34,6 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
             if (snapshot.hasError) {
               return Text("Error: ${snapshot.error}");
             }
-            _deviceColors =
-                List<Color>.filled(snapshot.data!.length, Colors.white);
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
@@ -52,9 +42,13 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
                     device['devicename'] as String? ?? 'Unknown Device';
                 String deviceLocation = device['devicelocation'] as String? ??
                     'No Location Specified';
+                String deviceId = device['deviceid'] as String? ?? '';
 
                 return SwitchAndButton(
-                    name: deviceName, location: deviceLocation, updateChosenColor: updateChosenColor,);
+                  name: deviceName,
+                  location: deviceLocation,
+                  deviceId: deviceId,
+                );
               },
             );
           } else {
