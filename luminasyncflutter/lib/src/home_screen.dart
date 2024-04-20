@@ -31,6 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (userDetails != null) {
       Map<String, dynamic> user = jsonDecode(userDetails);
       String userId = user['userid'].toString();
+      //save the user id to shared preferences
+      await prefs.setString('userId', userId);
       setState(() {
         _userId = userId;
       });

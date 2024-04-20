@@ -1,0 +1,166 @@
+[
+    {
+      "title": "Atomic swirl",
+      "color": "0xFF0000"
+    },
+    {
+      "title": "Blue mood blobs",
+      "color": "0x00FF00"
+    },
+    {
+      "title": "Breath",
+      "color": "0x0000FF"
+    },
+    {
+      "title": "Candle",
+      "color": "0xFFFF00"
+    },
+    {
+      "title": "Cinema brighten lights",
+      "color": "0xFF00FF"
+    },
+    {
+      "title": "Cinema dim lights",
+      "color": "0x00FFFF"
+    },
+    {
+      "title": "Cold mood blobs",
+      "color": "0x800000"
+    },
+    {
+      "title": "Collision",
+      "color": "0x008000"
+    },
+    {
+      "title": "Color traces",
+      "color": "0x000080"
+    },
+    {
+      "title": "Double swirl",
+      "color": "0x808000"
+    },
+    {
+      "title": "Fire",
+      "color": "0x800080"
+    },
+    {
+      "title": "Flags Germany/Sweden",
+      "color": "0x008080"
+    },
+    {
+      "title": "Full color mood blobs",
+      "color": "0xC00000"
+    },
+    {
+      "title": "Green mood blobs",
+      "color": "0x00C000"
+    },
+    {
+      "title": "Knight rider",
+      "color": "0x0000C0"
+    },
+    {
+      "title": "Led Test",
+      "color": "0xC0C000"
+    },
+    {
+      "title": "Led Test - Sequence",
+      "color": "0xC000C0"
+    },
+    {
+      "title": "Light clock",
+      "color": "0x00C0C0"
+    },
+    {
+      "title": "Lights",
+      "color": "0xFF0000"
+    },
+    {
+      "title": "Matrix",
+      "color": "0x00FF00"
+    },
+    {
+      "title": "Notify blue",
+      "color": "0x0000FF"
+    },
+    {
+      "title": "Pac-Man",
+      "color": "0xFFFF00"
+    },
+    {
+      "title": "Plasma",
+      "color": "0xFF00FF"
+    },
+    {
+      "title": "Police Lights Single",
+      "color": "0x00FFFF"
+    },
+    {
+      "title": "Police Lights Solid",
+      "color": "0x800000"
+    },
+    {
+      "title": "Rainbow mood",
+      "color": "0x008000"
+    },
+    {
+      "title": "Rainbow swirl",
+      "color": "0x000080"
+    },
+    {
+      "title": "Rainbow swirl fast",
+      "color": "0x808000"
+    },
+    {
+      "title": "Random",
+      "color": "0x800080"
+    },
+    {
+      "title": "Red mood blobs",
+      "color": "0x008080"
+    },
+    {
+      "title": "Sea waves",
+      "color": "0xC00000"
+    },
+    {
+      "title": "Snake",
+      "color": "0x00C000"
+    },
+    {
+      "title": "Sparks",
+      "color": "0x0000C0"
+    },
+    {
+      "title": "Strobe red",
+      "color": "0xC0C000"
+    },
+    {
+      "title": "Strobe white",
+      "color": "0xC000C0"
+    },
+    {
+      "title": "System Shutdown",
+      "color": "0x00C0C0"
+    },
+    {
+      "title": "Trails",
+      "color": "0xFF0000"
+    },
+    {
+      "title": "Trails color",
+      "color": "0x00FF00"
+    },
+    {
+      "title": "Warm mood blobs",
+      "color": "0x0000FF"
+    },
+    {
+      "title": "Waves with Color",
+      "color": "0xFFFF00"
+    },
+    {
+      "title": "X-Mas",
+      "color": "0xFF00FF"
+    }
+  ]
