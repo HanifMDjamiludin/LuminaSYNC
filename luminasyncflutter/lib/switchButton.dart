@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
+import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SwitchAndButton extends StatefulWidget {
   final String name;
   final String location;
-  final String deviceId; // Add deviceId parameter
+  final String deviceId;
+  final bool initialSwitchState; // Initial state of the switch button
 
   SwitchAndButton({
     required this.name,
     required this.location,
-    required this.deviceId, // Include deviceId in constructor
+    required this.deviceId,
+    required this.initialSwitchState,
   });
 
   @override
@@ -18,9 +21,23 @@ class SwitchAndButton extends StatefulWidget {
 }
 
 class _SwitchAndButtonState extends State<SwitchAndButton> {
-  bool _switchValue = false;
+  bool _switchValue = false; //
   Color _chosenColor = Colors.blue;
-  final ApiService _apiService = ApiService(); // Instance of ApiService
+  final ApiService _apiService = ApiService(); //
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSwitchState();
+  }
+
+  void _loadSwitchState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _switchValue = prefs.getBool('${widget.deviceId}_switchState') ??
+          widget.initialSwitchState;
+    });
+  }
 
   void _onButtonPressed() {
     showDialog(
@@ -37,7 +54,6 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
                   print(value.value.toRadixString(16));
                   _chosenColor = value;
                 });
-                // Handle color change
               },
               initialPicker: Picker.paletteHue,
             ),
@@ -47,7 +63,6 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     );
   }
 
-  // Method to set device power
   Future<void> _setDevicePower(String power) async {
     try {
       await _apiService.setPower(widget.deviceId, power);
@@ -55,6 +70,12 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
       // Handle error
       print('Error setting device power: $e');
     }
+  }
+
+  // Method to save the switch state!!
+  void _saveSwitchState(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('${widget.deviceId}_switchState', value);
   }
 
   @override
@@ -87,6 +108,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
                 } else {
                   _setDevicePower('off');
                 }
+                _saveSwitchState(value); // Saving the switch state here!
               });
             },
           )
