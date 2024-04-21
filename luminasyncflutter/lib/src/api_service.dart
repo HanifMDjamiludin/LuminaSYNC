@@ -111,25 +111,6 @@ Future<dynamic> addUserDevice(String id, Map<String, dynamic> deviceData) async 
     }
 }
 
-/*
-Deprecated. Use the setPower, setColor, setBrightness, and setEffect methods instead.
-*/
-// Future<String> publishCommand(String deviceID, String command) async {
-//   final response = await http.post(
-//     Uri.parse('$_baseUrl/publish/$deviceID'),
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//     body: jsonEncode({'deviceID': deviceID, 'command': command}),
-//   );
-
-//   if (response.statusCode == 200 && response.body == "Message published") {
-//     return response.body;
-//   } else {
-//     throw Exception('Failed to publish command');
-//   }
-// }
-
 // Method for setting color
 Future<String> setColor(String deviceID, String color) async {
   final response = await http.post(

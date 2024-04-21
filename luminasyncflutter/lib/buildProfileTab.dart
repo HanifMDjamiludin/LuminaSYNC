@@ -5,16 +5,37 @@ import 'dart:convert';
 
 import 'package:luminasyncflutter/device_manager.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileTab extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return _buildProfileTab(context);
+  _ProfileTabState createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  String displayName = 'User'; // Default display name
+
+  @override
+  void initState() {
+    super.initState();
+    loadDisplayName();
   }
 
-  Widget _buildProfileTab(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final String displayName = user?.displayName ?? 'User';
+  Future<void> loadDisplayName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? username = prefs.getString('username');
+    if (username != null && username.isNotEmpty) {
+      setState(() {
+        displayName = username;
+      });
+    } else {
+      final user = FirebaseAuth.instance.currentUser;
+      setState(() {
+        displayName = user?.displayName ?? 'User'; // Fallback to default display name
+      });
+    }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
