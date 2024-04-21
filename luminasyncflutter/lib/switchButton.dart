@@ -7,7 +7,7 @@ class SwitchAndButton extends StatefulWidget {
   final String name;
   final String location;
   final String deviceId;
-  final bool initialSwitchState; // Initial state of the switch button
+  final bool initialSwitchState;
 
   SwitchAndButton({
     required this.name,
@@ -21,14 +21,15 @@ class SwitchAndButton extends StatefulWidget {
 }
 
 class _SwitchAndButtonState extends State<SwitchAndButton> {
-  bool _switchValue = false; //
+  bool _switchValue = false;
   Color _chosenColor = Colors.blue;
-  final ApiService _apiService = ApiService(); //
+  final ApiService _apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
     _loadSwitchState();
+    _loadChosenColor();
   }
 
   void _loadSwitchState() async {
@@ -36,6 +37,14 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     setState(() {
       _switchValue = prefs.getBool('${widget.deviceId}_switchState') ??
           widget.initialSwitchState;
+    });
+  }
+
+  void _loadChosenColor() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _chosenColor = Color(
+          prefs.getInt('${widget.deviceId}_chosenColor') ?? Colors.blue.value);
     });
   }
 
@@ -48,14 +57,29 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
           content: Container(
             width: double.maxFinite,
             height: 600,
-            child: ColorPicker(
-              onChanged: (value) {
-                setState(() {
-                  print(value.value.toRadixString(16));
-                  _chosenColor = value;
-                });
-              },
-              initialPicker: Picker.paletteHue,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ColorPicker(
+                  color: _chosenColor,
+                  onChanged: (value) {
+                    setState(() {
+                      _chosenColor = value;
+                    });
+                  },
+                  initialPicker: Picker.paletteHue,
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    _saveChosenColor(
+                        _chosenColor); // This Saves the chosen color
+                    _updateLEDColor(_chosenColor); // Update LED color
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
             ),
           ),
         );
@@ -67,15 +91,27 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     try {
       await _apiService.setPower(widget.deviceId, power);
     } catch (e) {
-      // Handle error
       print('Error setting device power: $e');
     }
   }
 
-  // Method to save the switch state!!
   void _saveSwitchState(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('${widget.deviceId}_switchState', value);
+  }
+
+  void _saveChosenColor(Color color) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('${widget.deviceId}_chosenColor', color.value);
+  }
+
+  Future<void> _updateLEDColor(Color color) async {
+    try {
+      String hexColor = '#${color.value.toRadixString(16).substring(2)}';
+      await _apiService.setColor(widget.deviceId, hexColor);
+    } catch (e) {
+      print('Error updating LED color: $e');
+    }
   }
 
   @override
@@ -108,7 +144,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
                 } else {
                   _setDevicePower('off');
                 }
-                _saveSwitchState(value); // Saving the switch state here!
+                _saveSwitchState(value);
               });
             },
           )
