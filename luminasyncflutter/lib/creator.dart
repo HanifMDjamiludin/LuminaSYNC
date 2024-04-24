@@ -53,18 +53,21 @@ class _PatternCreatorState extends State<PatternCreator> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      primary: false,
-      padding: const EdgeInsets.all(20),
-      crossAxisSpacing: 40,
-      mainAxisSpacing: 10,
-      crossAxisCount: 2,
-      children: <Widget>[
-        Container(
+    return Row(
+  crossAxisAlignment: CrossAxisAlignment.start, // Adjust alignment if needed
+  children: <Widget>[
+    Expanded(
+      child: GridView.count(
+        padding: const EdgeInsets.all(20),
+        crossAxisSpacing: 20, // Decreased cross axis spacing
+        mainAxisSpacing: 20, // Decreased main axis spacing
+        crossAxisCount: 1,
+        children: <Widget>[
+           Container(
           padding: const EdgeInsets.all(8),
           color: Colors.teal[100],
           child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
+              onTap: _onButtonPressed,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
                 '    ',
@@ -76,7 +79,7 @@ class _PatternCreatorState extends State<PatternCreator> {
           padding: const EdgeInsets.all(8),
           color: Colors.teal[100],
           child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
+              onTap: _onButtonPressed,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
                 '    ',
@@ -88,7 +91,7 @@ class _PatternCreatorState extends State<PatternCreator> {
           padding: const EdgeInsets.all(8),
           color: Colors.teal[100],
           child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
+              onTap: _onButtonPressed,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
                 '    ',
@@ -100,7 +103,29 @@ class _PatternCreatorState extends State<PatternCreator> {
           padding: const EdgeInsets.all(8),
           color: Colors.teal[100],
           child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
+              onTap: _onButtonPressed,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ),
+    ],
+      ),
+    ),
+    Expanded(
+      child: GridView.count(
+        padding: const EdgeInsets.all(20),
+        crossAxisSpacing: 20, // Decreased cross axis spacing
+        mainAxisSpacing: 20, // Decreased main axis spacing
+        crossAxisCount: 1,
+        children: <Widget>[
+                 Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _onButtonPressed,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
                 '    ',
@@ -112,7 +137,7 @@ class _PatternCreatorState extends State<PatternCreator> {
           padding: const EdgeInsets.all(8),
           color: Colors.teal[100],
           child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
+              onTap: _onButtonPressed,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
                 '    ',
@@ -124,7 +149,7 @@ class _PatternCreatorState extends State<PatternCreator> {
           padding: const EdgeInsets.all(8),
           color: Colors.teal[100],
           child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
+              onTap: _onButtonPressed,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
                 '    ',
@@ -136,7 +161,7 @@ class _PatternCreatorState extends State<PatternCreator> {
           padding: const EdgeInsets.all(8),
           color: Colors.teal[100],
           child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
+              onTap: _onButtonPressed,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
                 '    ',
@@ -144,19 +169,119 @@ class _PatternCreatorState extends State<PatternCreator> {
               ),
             ),
         ),
-        Container(
-          padding: const EdgeInsets.all(8),
-          color: Colors.teal[100],
-          child: GestureDetector(
-              onTap: _switchValue ? _onButtonPressed : null,
-              //TEMPORARY: Need to change this text to a container (not working)
-              child: Text(
-                '    ',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-        ), 
-      ],
-    );
+        ],
+      ),
+    ),
+  ],
+);
+
+
+    }
+
+    // GridView.count(
+    //   primary: false,
+    //   padding: const EdgeInsets.all(20),
+    //   crossAxisSpacing: 40,
+    //   mainAxisSpacing: 10,
+    //   crossAxisCount: 2,
+    //   children: <Widget>[
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ),
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ),
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ),
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ),
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ),
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ),
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ),
+    //     Container(
+    //       padding: const EdgeInsets.all(8),
+    //       color: Colors.teal[100],
+    //       child: GestureDetector(
+    //           onTap: _switchValue ? _onButtonPressed : null,
+    //           //TEMPORARY: Need to change this text to a container (not working)
+    //           child: Text(
+    //             '    ',
+    //             style: TextStyle(color: Colors.white),
+    //           ),
+    //         ),
+    //     ), 
+    //   ],
+    // );
   }
-}
+
