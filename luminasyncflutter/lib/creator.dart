@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -54,18 +53,17 @@ class _PatternCreatorState extends State<PatternCreator> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 25, // Set a fixed height for the container
-      child: Container(
-        decoration: BoxDecoration(
-          color: _switchValue ? Colors.blue : Colors.grey,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            GestureDetector(
+    return GridView.count(
+      primary: false,
+      padding: const EdgeInsets.all(20),
+      crossAxisSpacing: 40,
+      mainAxisSpacing: 10,
+      crossAxisCount: 2,
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
               onTap: _switchValue ? _onButtonPressed : null,
               //TEMPORARY: Need to change this text to a container (not working)
               child: Text(
@@ -73,19 +71,92 @@ class _PatternCreatorState extends State<PatternCreator> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            Transform.scale(
-                scale: 0.5,
-                child: Switch(
-                  value: _switchValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _switchValue = value;
-                    });
-                  },
-                ))
-          ],
         ),
-      ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _switchValue ? _onButtonPressed : null,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _switchValue ? _onButtonPressed : null,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _switchValue ? _onButtonPressed : null,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _switchValue ? _onButtonPressed : null,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _switchValue ? _onButtonPressed : null,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _switchValue ? _onButtonPressed : null,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          color: Colors.teal[100],
+          child: GestureDetector(
+              onTap: _switchValue ? _onButtonPressed : null,
+              //TEMPORARY: Need to change this text to a container (not working)
+              child: Text(
+                '    ',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+        ), 
+      ],
     );
   }
 }

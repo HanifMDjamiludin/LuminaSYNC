@@ -112,16 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return PresetPatterns();
       case 2:
-        return Row(
-          children: [
-            PatternCreator(),
-            PatternCreator(),
-            PatternCreator(),
-            PatternCreator(),
-            PatternCreator(),
-            PatternCreator()
-          ],
-        );
+        return PatternCreator();
       case 3:
         return ProfileTab();
       default:
