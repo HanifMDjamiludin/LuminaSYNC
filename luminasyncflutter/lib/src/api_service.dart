@@ -251,6 +251,11 @@ Future<dynamic> modifyDeviceLocation(String userId, String deviceId, String devi
     }
 }
 
+//Stop the effect on a device
+Future<String> stopEffect(String deviceID) async {
+  return setColor(deviceID, "000000");
+}
+
 // Identify a device by making its lights blink white for 5 seconds
 Future<String> identifyDevice(String deviceID) async {
   const String white = "FFFFFF";  // White color in hex
