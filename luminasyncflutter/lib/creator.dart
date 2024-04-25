@@ -31,6 +31,8 @@ class PatternCreator extends StatefulWidget {
 class _PatternCreatorState extends State<PatternCreator> {
   Color _chosenColor = Colors.blue;
   final ApiService _apiService = ApiService();
+  List<Offset> circlePositions = [];
+  List<int> deviceNumbers = []; // List to hold device numbers
 
   void _onButtonPressed() {
     showDialog(
@@ -71,16 +73,17 @@ class _PatternCreatorState extends State<PatternCreator> {
     );
   }
 
-    void _saveChosenColor(Color color) async {
+  void _saveChosenColor(Color color) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.setInt('${widget.deviceId}_chosenColor', color.value);
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
+      child: Column(
       crossAxisAlignment:
-          CrossAxisAlignment.start, // Adjust alignment if needed
+          CrossAxisAlignment.center, // Adjust alignment if needed
       children: <Widget>[
         Expanded(
           child: GridView.count(
@@ -188,6 +191,34 @@ class _PatternCreatorState extends State<PatternCreator> {
             ],
           ),
         ),
+        GestureDetector(
+            onTap: () {
+              setState(() {
+                // Add a new circle position to the list
+                final RenderBox renderBox =
+                    context.findRenderObject() as RenderBox;
+                final newPosition = renderBox.globalToLocal(Offset.zero);
+                circlePositions.add(newPosition);
+
+                // Add a new device number for the new circle
+                deviceNumbers.add(deviceNumbers.isEmpty ? 1 : deviceNumbers.last + 1);
+              });
+            },
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  '+',
+                  style: TextStyle(fontSize: 50, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
       ],
     )
     );
