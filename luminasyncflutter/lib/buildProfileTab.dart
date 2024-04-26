@@ -48,7 +48,12 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('USER AREA'),
+        title: Text(
+          'USER AREA',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 10,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

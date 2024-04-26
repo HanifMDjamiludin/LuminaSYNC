@@ -96,7 +96,12 @@ class _PatternCreatorState extends State<PatternCreator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PATTERN CREATOR'),
+        title: Text(
+          'PATTERN CREATOR',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 10,
       ),
       body: Container(
         child: Column(

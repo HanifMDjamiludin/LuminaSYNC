@@ -24,7 +24,12 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("MY DEVICES"),
+        title: Text(
+          'MY DEVICES',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 10,
       ),
       body: FutureBuilder<List<dynamic>>(
         future: _devicesFuture,
