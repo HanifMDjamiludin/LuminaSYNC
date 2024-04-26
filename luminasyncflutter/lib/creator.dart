@@ -86,9 +86,18 @@ class _PatternCreatorState extends State<PatternCreator> {
     });
   }
 
-  void _removeContainers() {
+  // void _removeContainers() {
+  //   setState(() {
+  //     containerCount -= 2; // Increase the container count by 2
+  //   });
+  // }
+
+  //removes a row of containers
+  void _removeRow() {
     setState(() {
-      containerCount -= 2; // Increase the container count by 2
+      if (containerCount > 2) {
+        containerCount -= 2;
+      }
     });
   }
 
@@ -96,12 +105,24 @@ class _PatternCreatorState extends State<PatternCreator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'PATTERN CREATOR',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text('Pattern Creator'),
+            Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: _addContainers,
+                ),
+                IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: _removeRow,
+                ),
+              ],
+            ),
+          ],
         ),
-        backgroundColor: Colors.white,
-        elevation: 10,
       ),
       body: Container(
         child: Column(
@@ -130,8 +151,8 @@ class _PatternCreatorState extends State<PatternCreator> {
                 }),
               ),
             ),
-            ElevatedButton(
-                onPressed: _addContainers, child: Text("Add to Pattern")),
+            // ElevatedButton(
+            //     onPressed: _addContainers, child: Text("Add to Pattern")),
           ],
         ),
       ),
