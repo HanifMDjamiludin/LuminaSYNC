@@ -194,7 +194,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
           title: Center(
             child: Text(
               'LuminaSYNC',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              style: GoogleFonts.orbitron(
+                // Use Google Fonts Orbitron
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           backgroundColor: Colors.white,

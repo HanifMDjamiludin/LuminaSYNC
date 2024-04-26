@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luminasyncflutter/creator.dart';
 import 'package:luminasyncflutter/patterns.dart';
 import 'package:luminasyncflutter/devices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:luminasyncflutter/buildProfileTab.dart';
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -48,17 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Center(
           child: Text(
             'LuminaSYNC',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            style: GoogleFonts.orbitron(
+              // Use Google Fonts Orbitron
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              _handleLogout(context);
-            },
-          ),
-        ],
+        actions: [],
       ),
       body: _getBody(_currentIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -89,14 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-  }
-
-  void _handleLogout(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
-    Navigator.pushReplacementNamed(context, '/');
   }
 
   Widget _getBody(int index) {

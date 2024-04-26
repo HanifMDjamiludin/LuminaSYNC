@@ -140,7 +140,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
               setState(() {
                 _switchValue = value;
                 if (value) {
-                  _setDevicePower('on');
+                  _updateLEDColor(_chosenColor);
                 } else {
                   _setDevicePower('off');
                 }
