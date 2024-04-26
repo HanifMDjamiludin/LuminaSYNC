@@ -30,11 +30,16 @@ class PatternCreator extends StatefulWidget {
 
 class _PatternCreatorState extends State<PatternCreator> {
   int containerCount = 8;
-
-  Color _chosenColor = Colors.blue;
   final ApiService _apiService = ApiService();
   List<Offset> circlePositions = [];
   List<int> deviceNumbers = []; // List to hold device numbers
+  List<Color> _chosenColors = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _chosenColors = List.generate(containerCount, (index) => Colors.blue);
+  }
 
   void _onButtonPressed(int index) {
     showDialog(
@@ -49,10 +54,10 @@ class _PatternCreatorState extends State<PatternCreator> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ColorPicker(
-                  color: _chosenColor,
+                  color: _chosenColors[index],
                   onChanged: (value) {
                     setState(() {
-                      _chosenColor = value;
+                      _chosenColors[index] = value;
                     });
                   },
                   initialPicker: Picker.paletteHue,
@@ -60,10 +65,7 @@ class _PatternCreatorState extends State<PatternCreator> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    _saveChosenColor(
-                        _chosenColor); // This Saves the chosen color
-                    // _updateLEDColor(_chosenColor); // Update LED color
-                    Navigator.of(context).pop();
+                    Navigator.of(context). pop();
                   },
                   child: const Text('OK'),
                 ),
@@ -75,28 +77,18 @@ class _PatternCreatorState extends State<PatternCreator> {
     );
   }
 
-  void _saveChosenColor(Color color) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setInt('${widget.deviceId}_chosenColor', color.value);
-  }
-
   void _addContainers() {
     setState(() {
       containerCount += 2; // Increase the container count by 2
+      _chosenColors.addAll(List.generate(2, (_) => Colors.blue)); // Initialize colors for new containers
     });
   }
 
-  // void _removeContainers() {
-  //   setState(() {
-  //     containerCount -= 2; // Increase the container count by 2
-  //   });
-  // }
-
-  //removes a row of containers
   void _removeRow() {
     setState(() {
       if (containerCount > 2) {
         containerCount -= 2;
+        _chosenColors.removeRange(containerCount, _chosenColors.length); // Remove colors for removed containers
       }
     });
   }
@@ -137,11 +129,9 @@ class _PatternCreatorState extends State<PatternCreator> {
                 children: List.generate(containerCount, (index) {
                   return Container(
                     padding: const EdgeInsets.all(8),
-                    color: _chosenColor,
+                    color: _chosenColors[index], // Use individual color for each container
                     child: GestureDetector(
-                      onTap: () => _onButtonPressed(
-                          index), // Pass index to the onTap function
-                      //TEMPORARY: Need to change this text to a container (not working)
+                      onTap: () => _onButtonPressed(index), // Pass index to the onTap function
                       child: Text(
                         'Container ${index + 1}', // Display the container index
                         style: TextStyle(color: Colors.white),
@@ -151,8 +141,6 @@ class _PatternCreatorState extends State<PatternCreator> {
                 }),
               ),
             ),
-            // ElevatedButton(
-            //     onPressed: _addContainers, child: Text("Add to Pattern")),
           ],
         ),
       ),
