@@ -34,11 +34,14 @@ class _PatternCreatorState extends State<PatternCreator> {
   List<Offset> circlePositions = [];
   List<int> deviceNumbers = []; // List to hold device numbers
   List<Color> _chosenColors = [];
+  Future? loadColorsFuture;
 
   @override
   void initState() {
     super.initState();
-    _chosenColors = List.generate(containerCount, (index) => Colors.blue);
+    // _chosenColors = List.generate(containerCount, (index) => Colors.blue);
+    // loadColors();
+    loadColorsFuture = loadColors(); // Store the Future
   }
 
   void _onButtonPressed(int index) {
@@ -59,6 +62,7 @@ class _PatternCreatorState extends State<PatternCreator> {
                     setState(() {
                       _chosenColors[index] = value;
                     });
+                    saveColors();
                   },
                   initialPicker: Picker.paletteHue,
                 ),
@@ -77,13 +81,16 @@ class _PatternCreatorState extends State<PatternCreator> {
     );
   }
 
+  //Add a row of containers
   void _addContainers() {
     setState(() {
       containerCount += 2; // Increase the container count by 2
       _chosenColors.addAll(List.generate(2, (_) => Colors.blue)); // Initialize colors for new containers
     });
+    saveColors();
   }
 
+  //Remove a row of containers
   void _removeRow() {
     setState(() {
       if (containerCount > 2) {
@@ -91,59 +98,113 @@ class _PatternCreatorState extends State<PatternCreator> {
         _chosenColors.removeRange(containerCount, _chosenColors.length); // Remove colors for removed containers
       }
     });
+    saveColors();
+  }
+
+  //Reset the Pattern
+  void _resetContainers() {
+  setState(() {
+    containerCount = 8;
+    _chosenColors = List<Color>.generate(8, (index) => Colors.blue);
+  });
+  saveColors();
+  }
+
+  // Convert Color to String
+  String colorToString(Color color) {
+    return color.value.toRadixString(16);
+  }
+
+  // Convert String to Color
+  Color stringToColor(String colorString) {
+    return Color(int.parse(colorString, radix: 16));
+  }
+
+  // Save colors to SharedPreferences
+  Future<void> saveColors() async {
+    final prefs = await SharedPreferences.getInstance();
+    final colorStrings = _chosenColors.map(colorToString).toList();
+    await prefs.setStringList('chosenColors', colorStrings);
+  }
+
+  // Load colors from SharedPreferences
+  Future<void> loadColors() async {
+    final prefs = await SharedPreferences.getInstance();
+    final colorStrings = prefs.getStringList('chosenColors');
+
+    if (colorStrings == null || colorStrings.isEmpty) {
+      _chosenColors = List.generate(containerCount, (index) => Colors.blue);
+    } else {
+      _chosenColors = colorStrings.map(stringToColor).toList();
+    }
+
+    setState(() {}); // Notify the framework that the internal state of this object has changed.
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text('Pattern Creator'),
-            Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: _addContainers,
-                ),
-                IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: _removeRow,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: GridView.count(
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 40, // Decreased cross axis spacing
-                mainAxisSpacing: 20, // Decreased main axis spacing
-                crossAxisCount: 2,
-                children: List.generate(containerCount, (index) {
-                  return Container(
-                    padding: const EdgeInsets.all(8),
-                    color: _chosenColors[index], // Use individual color for each container
-                    child: GestureDetector(
-                      onTap: () => _onButtonPressed(index), // Pass index to the onTap function
-                      child: Text(
-                        'Container ${index + 1}', // Display the container index
-                        style: TextStyle(color: Colors.white),
+    return FutureBuilder(
+      future: loadColorsFuture, // Pass the stored Future
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (loadColorsFuture == null || snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator()); // Show a loading spinner while waiting
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('Pattern Creator'),
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: _resetContainers,
                       ),
-                    ),
-                  );
-                }),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: _addContainers,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.remove),
+                        onPressed: _removeRow,
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+            body: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: GridView.count(
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 40, // Decreased cross axis spacing
+                      mainAxisSpacing: 20, // Decreased main axis spacing
+                      crossAxisCount: 2,
+                      children: List.generate(containerCount, (index) {
+                        return Container(
+                          padding: const EdgeInsets.all(8),
+                          color: _chosenColors[index], // Use individual color for each container
+                          child: GestureDetector(
+                            onTap: () => _onButtonPressed(index), // Pass index to the onTap function
+                            child: Text(
+                              'Container ${index + 1}', // Display the container index
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
