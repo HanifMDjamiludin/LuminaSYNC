@@ -65,6 +65,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
                   onChanged: (value) {
                     setState(() {
                       _chosenColor = value;
+                      _updateLEDColor(_chosenColor);
                     });
                   },
                   initialPicker: Picker.paletteHue,
@@ -72,9 +73,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    _saveChosenColor(
-                        _chosenColor); // This Saves the chosen color
-                    _updateLEDColor(_chosenColor); // Update LED color
+                    _saveChosenColor(_chosenColor);
                     Navigator.of(context).pop();
                   },
                   child: Text('OK'),

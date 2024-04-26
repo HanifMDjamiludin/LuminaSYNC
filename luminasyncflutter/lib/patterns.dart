@@ -57,7 +57,7 @@ class _PresetPatternsState extends State<PresetPatterns> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Available Patterns'),
+        title: Text('USER PATTERNS'),
         actions: [
           DropdownButton<String>(
             value: _selectedDeviceId,

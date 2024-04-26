@@ -85,7 +85,8 @@ class _PatternCreatorState extends State<PatternCreator> {
       containerCount += 2; // Increase the container count by 2
     });
   }
-    void _removeContainers() {
+
+  void _removeContainers() {
     setState(() {
       containerCount -= 2; // Increase the container count by 2
     });
@@ -93,37 +94,42 @@ class _PatternCreatorState extends State<PatternCreator> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PATTERN CREATOR'),
+      ),
+      body: Container(
         child: Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.center, // Adjust alignment if needed
-      children: <Widget>[
-        Expanded(
-          child: GridView.count(
-            padding: const EdgeInsets.all(20),
-            crossAxisSpacing: 40, // Decreased cross axis spacing
-            mainAxisSpacing: 20, // Decreased main axis spacing
-            crossAxisCount: 2,
-            children: List.generate(containerCount, (index) {
-              return Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: () => _onButtonPressed(
-                      index), // Pass index to the onTap function
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    'Container ${index + 1}', // Display the container index
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              );
-            }),
-          ),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: GridView.count(
+                padding: const EdgeInsets.all(20),
+                crossAxisSpacing: 40, // Decreased cross axis spacing
+                mainAxisSpacing: 20, // Decreased main axis spacing
+                crossAxisCount: 2,
+                children: List.generate(containerCount, (index) {
+                  return Container(
+                    padding: const EdgeInsets.all(8),
+                    color: _chosenColor,
+                    child: GestureDetector(
+                      onTap: () => _onButtonPressed(
+                          index), // Pass index to the onTap function
+                      //TEMPORARY: Need to change this text to a container (not working)
+                      child: Text(
+                        'Container ${index + 1}', // Display the container index
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            ElevatedButton(
+                onPressed: _addContainers, child: Text("Add to Pattern")),
+          ],
         ),
-        ElevatedButton(
-            onPressed: _addContainers, child: Text("Add to Pattern")),
-      ],
-    ));
+      ),
+    );
   }
 }
