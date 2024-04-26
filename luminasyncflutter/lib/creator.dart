@@ -29,12 +29,14 @@ class PatternCreator extends StatefulWidget {
 }
 
 class _PatternCreatorState extends State<PatternCreator> {
+  int containerCount = 8;
+
   Color _chosenColor = Colors.blue;
   final ApiService _apiService = ApiService();
   List<Offset> circlePositions = [];
   List<int> deviceNumbers = []; // List to hold device numbers
 
-  void _onButtonPressed() {
+  void _onButtonPressed(int index) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -78,10 +80,21 @@ class _PatternCreatorState extends State<PatternCreator> {
     // prefs.setInt('${widget.deviceId}_chosenColor', color.value);
   }
 
+  void _addContainers() {
+    setState(() {
+      containerCount += 2; // Increase the container count by 2
+    });
+  }
+    void _removeContainers() {
+    setState(() {
+      containerCount -= 2; // Increase the container count by 2
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
+        child: Column(
       crossAxisAlignment:
           CrossAxisAlignment.center, // Adjust alignment if needed
       children: <Widget>[
@@ -91,136 +104,26 @@ class _PatternCreatorState extends State<PatternCreator> {
             crossAxisSpacing: 40, // Decreased cross axis spacing
             mainAxisSpacing: 20, // Decreased main axis spacing
             crossAxisCount: 2,
-            children: <Widget>[
-              Container(
+            children: List.generate(containerCount, (index) {
+              return Container(
                 padding: const EdgeInsets.all(8),
                 color: _chosenColor,
                 child: GestureDetector(
-                  onTap: _onButtonPressed,
+                  onTap: () => _onButtonPressed(
+                      index), // Pass index to the onTap function
                   //TEMPORARY: Need to change this text to a container (not working)
                   child: Text(
-                    '  ONE  ',
+                    'Container ${index + 1}', // Display the container index
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: _onButtonPressed,
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    '    ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-             Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: _onButtonPressed,
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    '  THREE  ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: _onButtonPressed,
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    '    ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: _onButtonPressed,
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    '    ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: _onButtonPressed,
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    '    ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: _onButtonPressed,
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    '    ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                color: _chosenColor,
-                child: GestureDetector(
-                  onTap: _onButtonPressed,
-                  //TEMPORARY: Need to change this text to a container (not working)
-                  child: Text(
-                    '    ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
+              );
+            }),
           ),
         ),
-        GestureDetector(
-            onTap: () {
-              setState(() {
-                // Add a new circle position to the list
-                final RenderBox renderBox =
-                    context.findRenderObject() as RenderBox;
-                final newPosition = renderBox.globalToLocal(Offset.zero);
-                circlePositions.add(newPosition);
-
-                // Add a new device number for the new circle
-                deviceNumbers.add(deviceNumbers.isEmpty ? 1 : deviceNumbers.last + 1);
-              });
-            },
-            child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  '+',
-                  style: TextStyle(fontSize: 50, color: Colors.white),
-                ),
-              ),
-            ),
-          ),
+        ElevatedButton(
+            onPressed: _addContainers, child: Text("Add to Pattern")),
       ],
-    )
-    );
+    ));
   }
 }
