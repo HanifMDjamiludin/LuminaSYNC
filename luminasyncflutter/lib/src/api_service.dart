@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:flutter/material.dart';
 
 class ApiService {
   final String _baseUrl = 'http://34.145.206.196:3000'; // Backend API URL
@@ -248,6 +249,32 @@ Future<dynamic> modifyDeviceLocation(String userId, String deviceId, String devi
         }
     } catch (e) {
         throw Exception('Failed to connect to the server: $e');
+    }
+}
+
+Future<String> createPattern(String userId, String patternName, List<Color> position1, List<Color> position2) async {
+
+    // Convert the Color objects to their hex string representation
+    List<String> position1Hex = position1.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
+    List<String> position2Hex = position2.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
+
+    final response = await http.post(
+        Uri.parse('$_baseUrl/users/$userId/patterns'),
+        headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+            'patternName': patternName,
+            'position1': position1Hex,
+            'position2': position2Hex,
+            'patternType': 'User',
+        }),
+    );
+
+    if (response.statusCode == 201) {
+        return 'Pattern created';
+    } else {
+        throw Exception('Failed to create pattern: ${response.statusCode}');
     }
 }
 
