@@ -93,7 +93,9 @@ class _PatternCreatorState extends State<PatternCreator> {
   void _addContainers() {
     setState(() {
       containerCount += 2; // Increase the container count by 2
-      _chosenColors.addAll(List.generate(2, (_) => Colors.blue)); // Initialize colors for new containers
+      // _chosenColors.addAll(List.generate(2, (_) => Colors.blue)); // Initialize colors for new containers
+      _leftColumnColors.add(Colors.blue); // Add a new default color to the left column
+      _rightColumnColors.add(Colors.blue); // Add a new default color to the right column
     });
     saveColors();
   }
@@ -103,7 +105,9 @@ class _PatternCreatorState extends State<PatternCreator> {
     setState(() {
       if (containerCount > 2) {
         containerCount -= 2;
-        _chosenColors.removeRange(containerCount, _chosenColors.length); // Remove colors for removed containers
+        // _chosenColors.removeRange(containerCount, _chosenColors.length); // Remove colors for removed containers
+        _leftColumnColors.add(Colors.blue); // Add a new default color to the left column
+        _rightColumnColors.add(Colors.blue); // Add a new default color to the right column
       }
     });
     saveColors();
