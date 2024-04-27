@@ -106,8 +106,8 @@ class _PatternCreatorState extends State<PatternCreator> {
       if (containerCount > 2) {
         containerCount -= 2;
         // _chosenColors.removeRange(containerCount, _chosenColors.length); // Remove colors for removed containers
-        _leftColumnColors.add(Colors.blue); // Add a new default color to the left column
-        _rightColumnColors.add(Colors.blue); // Add a new default color to the right column
+        _leftColumnColors.removeLast(); // Remove the last color from the left column
+        _rightColumnColors.removeLast(); // Remove the last color from the right column
       }
     });
     saveColors();
@@ -140,6 +140,7 @@ class _PatternCreatorState extends State<PatternCreator> {
     final rightColorStrings = _rightColumnColors.map(colorToString).toList();
     await prefs.setStringList('leftColumnColors', leftColorStrings);
     await prefs.setStringList('rightColumnColors', rightColorStrings);
+    await prefs.setInt('containerCount', containerCount); // Save the container count
   }
 
   // Load colors from SharedPreferences
@@ -147,6 +148,7 @@ class _PatternCreatorState extends State<PatternCreator> {
       final prefs = await SharedPreferences.getInstance();
       final leftColorStrings = prefs.getStringList('leftColumnColors'); // Retrieve left column colors
       final rightColorStrings = prefs.getStringList('rightColumnColors'); // Retrieve right column colors
+      containerCount = prefs.getInt('containerCount') ?? 8; // Default to 8 if not set
 
       _leftColumnColors = leftColorStrings != null ? leftColorStrings.map(stringToColor).toList() : // Check if leftColorStrings is null
           List.generate(containerCount ~/ 2, (_) => Colors.blue); // Initialize colors if null
