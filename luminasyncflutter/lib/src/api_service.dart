@@ -252,11 +252,38 @@ Future<dynamic> modifyDeviceLocation(String userId, String deviceId, String devi
     }
 }
 
-Future<String> createPattern(String userId, String patternName, List<Color> position1, List<Color> position2) async {
+// Future<String> createPattern(String userId, String patternName, List<Color> position1, List<Color> position2) async {
+
+//     // Convert the Color objects to their hex string representation
+//     List<String> position1Hex = position1.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
+//     List<String> position2Hex = position2.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
+
+//     final response = await http.post(
+//         Uri.parse('$_baseUrl/users/$userId/patterns'),
+//         headers: <String, String>{
+//             'Content-Type': 'application/json; charset=UTF-8',
+//         },
+//         body: jsonEncode(<String, dynamic>{
+//             'patternName': patternName,
+//             'position1': position1Hex,
+//             'position2': position2Hex,
+//             'patternType': 'User',
+//         }),
+//     );
+
+//     if (response.statusCode == 201) {
+//         return 'Pattern created';
+//     } else {
+//         throw Exception('Failed to create pattern: ${response.statusCode}');
+//     }
+// }
+
+Future<Map<String, dynamic>> createPattern(String userId, String patternName, List<Color> position1, List<Color> position2, Color iconColor) async {
 
     // Convert the Color objects to their hex string representation
     List<String> position1Hex = position1.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
     List<String> position2Hex = position2.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
+    String iconColorHex = iconColor.value.toRadixString(16).padLeft(8, '0');
 
     final response = await http.post(
         Uri.parse('$_baseUrl/users/$userId/patterns'),
@@ -268,13 +295,27 @@ Future<String> createPattern(String userId, String patternName, List<Color> posi
             'position1': position1Hex,
             'position2': position2Hex,
             'patternType': 'User',
+            'iconColor': iconColorHex,
         }),
     );
 
     if (response.statusCode == 201) {
-        return 'Pattern created';
+        return jsonDecode(response.body);
     } else {
         throw Exception('Failed to create pattern: ${response.statusCode}');
+    }
+}
+
+// Get all patterns for a user
+Future<List<dynamic>> getPatterns(String userId) async {
+    final response = await http.get(
+        Uri.parse('$_baseUrl/users/$userId/patterns'),
+    );
+
+    if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+    } else {
+        throw Exception('Failed to retrieve patterns: ${response.statusCode}');
     }
 }
 
