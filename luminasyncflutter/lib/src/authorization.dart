@@ -201,7 +201,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
               ),
             ),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black54,
           elevation: 0,
           actions: [
             Padding(
@@ -218,7 +218,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
           ),
         ),
         body: Container(
-          color: Colors.white,
+          color: Colors.black,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
@@ -229,10 +229,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.grey[100]!,
-                      const Color.fromARGB(255, 192, 192, 192)
+                    Color.fromRGBO(33, 33, 33, 1), // Equivalent to Colors.grey[950]
+                    Color.fromRGBO(112, 112, 112, 1), // Equivalent to Colors.grey[700]
                     ],
                   ),
+                      borderRadius: BorderRadius.circular(25), // Adjust the radius value as needed
+
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

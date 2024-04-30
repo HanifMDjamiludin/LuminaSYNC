@@ -50,9 +50,9 @@ class _ProfileTabState extends State<ProfileTab> {
       appBar: AppBar(
         title: Text(
           'USER AREA',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black54,
         elevation: 10,
       ),
       body: Padding(

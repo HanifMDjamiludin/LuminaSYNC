@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Pattern Creator'),
+          backgroundColor: Colors.black,
+          title: Text('PATTERN CREATOR'),
         ),
         body: Center(child: PatternCreator()),
       ),

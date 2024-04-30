@@ -55,9 +55,9 @@ class _PresetPatternsState extends State<PresetPatterns> {
       appBar: AppBar(
         title: Text(
           'PRESET PATTERNS',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black54,
         elevation: 10,
       ),
       body: FutureBuilder<List<LightingPattern>>(
