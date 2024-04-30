@@ -31,7 +31,7 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
             Text(
               'MY DEVICES',
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             Switch(
               value: masterSwitchState,
@@ -44,7 +44,7 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
             ),
           ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black54,
         elevation: 10,
       ),
       body: FutureBuilder<List<dynamic>>(
