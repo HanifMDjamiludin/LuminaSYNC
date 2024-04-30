@@ -48,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(
             'LuminaSYNC',
             style: GoogleFonts.orbitron(
-              // Use Google Fonts Orbitron
               fontSize: 25,
               fontWeight: FontWeight.bold,
             ),
