@@ -13,12 +13,20 @@ class DeviceManagerScreen extends StatefulWidget {
 
 class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
   late Future<List<dynamic>> _devicesFuture;
-  bool masterSwitchState = true; // Initial state of master switch
+  bool masterSwitchState = true;
 
   @override
   void initState() {
     super.initState();
     _devicesFuture = ApiService().getUserDevices(widget.userId);
+  }
+
+  // Function to toggle the master switch state
+  void _toggleMasterSwitch() {
+    setState(() {
+      masterSwitchState = true;
+      _turnAllDevices(true);
+    });
   }
 
   @override
@@ -28,7 +36,7 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'MY DEVICES',
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -71,18 +79,20 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
                   location: deviceLocation,
                   deviceId: deviceId,
                   initialSwitchState: initialSwitchState,
+                  masterSwitchState: masterSwitchState,
+                  toggleMasterSwitch: _toggleMasterSwitch,
                 );
               },
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
     );
   }
 
-// Function to turn on/off all devices based on master switch state
+  // Function to turn on/off all devices based on master switch state
   void _turnAllDevices(bool state) async {
     try {
       List<dynamic> devices = await ApiService().getUserDevices(widget.userId);

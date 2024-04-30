@@ -8,12 +8,16 @@ class SwitchAndButton extends StatefulWidget {
   final String location;
   final String deviceId;
   final bool initialSwitchState;
+  final bool masterSwitchState;
+  final VoidCallback toggleMasterSwitch;
 
   SwitchAndButton({
     required this.name,
     required this.location,
     required this.deviceId,
     required this.initialSwitchState,
+    required this.masterSwitchState,
+    required this.toggleMasterSwitch,
   });
 
   @override
@@ -53,7 +57,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Pick a Color'),
+          title: const Text('Pick a Color'),
           content: Container(
             width: double.maxFinite,
             height: 600,
@@ -117,28 +121,32 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: _switchValue ? _chosenColor : Colors.grey,
+        color: widget.masterSwitchState ? _chosenColor : Colors.grey,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
-            onTap: _switchValue ? _onButtonPressed : null,
+            onTap: widget.masterSwitchState ? _onButtonPressed : null,
             child: Container(
-              padding: EdgeInsets.all(50),
+              padding: const EdgeInsets.all(50),
               child: Text(
-                '${widget.name} in ${widget.location} is ${_switchValue ? 'on' : 'off'}',
-                style: TextStyle(color: Colors.white),
+                '${widget.name} in ${widget.location} is ${widget.masterSwitchState ? (_switchValue ? 'on' : 'off') : 'off'}',
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
           Switch(
-            value: _switchValue,
+            value: _switchValue && widget.masterSwitchState,
             onChanged: (value) {
               setState(() {
                 _switchValue = value;
                 if (value) {
+                  if (!widget.masterSwitchState) {
+                    widget.toggleMasterSwitch();
+                  }
+                  _setDevicePower('on');
                   _updateLEDColor(_chosenColor);
                 } else {
                   _setDevicePower('off');

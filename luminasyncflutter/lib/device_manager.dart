@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:luminasyncflutter/device_details_page.dart';
 import 'package:luminasyncflutter/device_discovery_page.dart';
 
@@ -27,7 +25,9 @@ class _DeviceManagerPageState extends State<DeviceManagerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Device Manager"),
+        title: Text("MY DEVICES"),
+        backgroundColor: Colors.black54,
+        elevation: 10,
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -35,8 +35,7 @@ class _DeviceManagerPageState extends State<DeviceManagerPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                //   builder: (context) => DeviceDiscoveryPage(userId: widget.userId), //Add this back later
-                builder: (context) => DeviceDiscoveryPage(),
+                  builder: (context) => DeviceDiscoveryPage(),
                 ),
               );
             },
@@ -51,37 +50,41 @@ class _DeviceManagerPageState extends State<DeviceManagerPage> {
               return Text("Error: ${snapshot.error}");
             }
             return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
                 var device = snapshot.data![index];
-                String deviceName = device['devicename'] as String? ?? 'Unknown Device'; //Handle null device name
-                String deviceLocation = device['devicelocation'] as String? ?? 'No Location Specified'; //Handle null device location
+                String deviceName =
+                    device['devicename'] as String? ?? 'Unknown Device';
+                String deviceLocation = device['devicelocation'] as String? ??
+                    'No Location Specified';
 
                 return ListTile(
-                title: Text(deviceName),
-                subtitle: Text('Location: $deviceLocation'),
-                trailing: Icon(Icons.edit),
-                onTap: () async {
-                final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                    builder: (context) => DeviceDetailsPage(
-                        device: snapshot.data![index],
-                        userId: widget.userId,
-                    ),
-                    ),
+                  title: Text(deviceName),
+                  subtitle: Text('Location: $deviceLocation'),
+                  trailing: Icon(
+                    Icons.edit,
+                    color: Colors.blue,
+                  ),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DeviceDetailsPage(
+                          device: snapshot.data![index],
+                          userId: widget.userId,
+                        ),
+                      ),
+                    );
+                    if (result == 'update') {
+                      setState(() {
+                        _devicesFuture =
+                            ApiService().getUserDevices(widget.userId);
+                      });
+                    }
+                  },
                 );
-                if (result == 'update') { // If the user updated the device
-                    setState(() {
-                    // This reloads the device list by re-fetching the devices
-                    _devicesFuture = ApiService().getUserDevices(widget.userId); // Fetch devices again
-                    });
-                }
-                },
-                );
-            },
+              },
             );
-
           } else {
             return Center(child: CircularProgressIndicator());
           }
