@@ -98,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
       case 1:
-        return PresetPatterns();
+        // return PresetPatterns();
+        return PatternTabs();
       case 2:
         return PatternCreator();
       case 3:
