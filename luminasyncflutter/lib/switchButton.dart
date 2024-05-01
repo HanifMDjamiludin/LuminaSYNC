@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
 import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
@@ -27,6 +29,8 @@ class SwitchAndButton extends StatefulWidget {
 class _SwitchAndButtonState extends State<SwitchAndButton> {
   bool _switchValue = false;
   Color _chosenColor = Colors.blue;
+  double _brightnessLevel = 0.5;
+  String _percentage = "50%";
   final ApiService _apiService = ApiService();
 
   @override
@@ -51,6 +55,24 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
           prefs.getInt('${widget.deviceId}_chosenColor') ?? Colors.blue.value);
     });
   }
+
+void _updateColor(double brightness) {
+  setState(() {
+    _brightnessLevel = brightness;
+    _percentage = (_brightnessLevel * 100).toStringAsFixed(0) + "%";
+
+    // Calculate the adjusted brightness with a minimum threshold
+    double adjustedBrightness = (_brightnessLevel * 2 - 1).clamp(-0.5, 1.0); // Clamp to a minimum of -0.5
+
+    // Adjust brightness without affecting color components
+    _chosenColor = Color.fromRGBO(
+      (_chosenColor.red * (1 + adjustedBrightness)).round().clamp(0, 255),
+      (_chosenColor.green * (1 + adjustedBrightness)).round().clamp(0, 255),
+      (_chosenColor.blue * (1 + adjustedBrightness)).round().clamp(0, 255),
+      1.0, // Opacity
+    );
+  });
+}
 
   void _onButtonPressed() {
     showDialog(
@@ -120,43 +142,55 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: widget.masterSwitchState ? _chosenColor : Colors.grey,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          GestureDetector(
-            onTap: widget.masterSwitchState ? _onButtonPressed : null,
-            child: Container(
-              padding: const EdgeInsets.all(50),
-              child: Text(
-                '${widget.name} in ${widget.location} is ${widget.masterSwitchState ? (_switchValue ? 'on' : 'off') : 'off'}',
-                style: const TextStyle(color: Colors.white),
-              ),
+        padding: const EdgeInsets.all(30),
+        decoration: BoxDecoration(
+          color: widget.masterSwitchState ? _chosenColor : Colors.grey,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: widget.masterSwitchState ? _onButtonPressed : null,
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: Text(
+                      '${widget.name} in ${widget.location} is ${widget.masterSwitchState ? (_switchValue ? 'on' : 'off') : 'off'}',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Switch(
+                  value: _switchValue && widget.masterSwitchState,
+                  onChanged: (value) {
+                    setState(() {
+                      _switchValue = value;
+                      if (value) {
+                        if (!widget.masterSwitchState) {
+                          widget.toggleMasterSwitch();
+                        }
+                        _setDevicePower('on');
+                        _updateLEDColor(_chosenColor);
+                      } else {
+                        _setDevicePower('off');
+                      }
+                      _saveSwitchState(value);
+                    });
+                  },
+                )
+              ],
             ),
-          ),
-          Switch(
-            value: _switchValue && widget.masterSwitchState,
-            onChanged: (value) {
-              setState(() {
-                _switchValue = value;
-                if (value) {
-                  if (!widget.masterSwitchState) {
-                    widget.toggleMasterSwitch();
-                  }
-                  _setDevicePower('on');
-                  _updateLEDColor(_chosenColor);
-                } else {
-                  _setDevicePower('off');
-                }
-                _saveSwitchState(value);
-              });
-            },
-          )
-        ],
-      ),
-    );
+            Slider(
+              value: _brightnessLevel,
+              onChanged: _updateColor,
+              min: 0.0,
+              max: 1.0,
+              divisions: 100,
+              label: _percentage,
+            )
+          ],
+        ));
   }
 }
