@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
 import 'package:luminasyncflutter/device_details_page.dart';
 import 'package:luminasyncflutter/device_discovery_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DeviceManagerPage extends StatefulWidget {
   final String userId;
@@ -25,9 +26,17 @@ class _DeviceManagerPageState extends State<DeviceManagerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("MY DEVICES"),
+        title: Center(
+          child: Text(
+            'LuminaSYNC',
+            style: GoogleFonts.orbitron(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         backgroundColor: Colors.black54,
-        elevation: 10,
+        elevation: 5,
         actions: [
           IconButton(
             icon: Icon(Icons.add),

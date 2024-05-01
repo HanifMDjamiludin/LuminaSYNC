@@ -115,12 +115,30 @@ class _DeviceDetailsPageState extends State<DeviceDetailsPage> {
               decoration: InputDecoration(labelText: 'Device Location'),
               onSubmitted: (_) => _updateDeviceLocation(),
             ),
+            SizedBox(
+                height:
+                    16.0), // Add some spacing between text fields and buttons
             ElevatedButton(
               onPressed: _updateDevice,
+              style: ElevatedButton.styleFrom(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                  side: BorderSide(color: Colors.white), // White border
+                ),
+              ),
               child: Text('Update Device Info'),
             ),
+            SizedBox(height: 8.0), // Add some spacing between buttons
             ElevatedButton(
               onPressed: _identifyDevice,
+              style: ElevatedButton.styleFrom(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                  side: BorderSide(color: Colors.white), // White border
+                ),
+              ),
               child: Text('Identify Device'),
             ),
           ],

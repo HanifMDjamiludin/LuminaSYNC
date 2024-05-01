@@ -37,9 +37,9 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'MY DEVICES',
+              'My Devices',
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  TextStyle(fontWeight: FontWeight.normal, color: Colors.white),
             ),
             Switch(
               value: masterSwitchState,
