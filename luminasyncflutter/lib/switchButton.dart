@@ -30,7 +30,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   bool _switchValue = false;
   Color _chosenColor = Colors.blue;
   double _brightnessLevel = 64;
-  String _percentage = "50%";
+  String _percentage = "50";
   final ApiService _apiService = ApiService();
 
   @override
@@ -59,7 +59,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   void _updateColor(double brightness) {
     setState(() {
       _brightnessLevel = brightness;
-      _percentage = (_brightnessLevel * 100).toStringAsFixed(0) + "%";
+      _percentage = (_brightnessLevel / 128).toStringAsFixed(0) + "%";
       _apiService.setBrightness(widget.deviceId, _brightnessLevel.toString());
     });
   }
