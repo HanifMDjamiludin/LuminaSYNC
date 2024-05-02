@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'preset_patterns.dart';
 import '/src/api_service.dart';
+import 'custom_patterns.dart';
 
 class PatternTabs extends StatelessWidget {
   @override
@@ -13,14 +14,14 @@ class PatternTabs extends StatelessWidget {
           bottom: TabBar(
             tabs: [
               Tab(icon: Icon(Icons.lightbulb_outline), text: "Preset Patterns"),
-              Tab(icon: Icon(Icons.palette), text: "Custom Patterns"), // Placeholder for custom patterns tab
+              Tab(icon: Icon(Icons.palette), text: "Custom Patterns"),
             ],
           ),
         ),
         body: TabBarView(
           children: [
             PresetPatterns(),
-            Center(child: Text("Custom Patterns Page Will Go Here")), // Placeholder
+            CustomPatterns(),
           ],
         ),
       ),
