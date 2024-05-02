@@ -29,7 +29,7 @@ class SwitchAndButton extends StatefulWidget {
 class _SwitchAndButtonState extends State<SwitchAndButton> {
   bool _switchValue = false;
   Color _chosenColor = Colors.blue;
-  double _brightnessLevel = 0.5;
+  double _brightnessLevel = 64;
   String _percentage = "50%";
   final ApiService _apiService = ApiService();
 
@@ -56,23 +56,13 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     });
   }
 
-void _updateColor(double brightness) {
-  setState(() {
-    _brightnessLevel = brightness;
-    _percentage = (_brightnessLevel * 100).toStringAsFixed(0) + "%";
-
-    // Calculate the adjusted brightness with a minimum threshold
-    double adjustedBrightness = (_brightnessLevel * 2 - 1).clamp(-0.5, 1.0); // Clamp to a minimum of -0.5
-
-    // Adjust brightness without affecting color components
-    _chosenColor = Color.fromRGBO(
-      (_chosenColor.red * (1 + adjustedBrightness)).round().clamp(0, 255),
-      (_chosenColor.green * (1 + adjustedBrightness)).round().clamp(0, 255),
-      (_chosenColor.blue * (1 + adjustedBrightness)).round().clamp(0, 255),
-      1.0, // Opacity
-    );
-  });
-}
+  void _updateColor(double brightness) {
+    setState(() {
+      _brightnessLevel = brightness;
+      _percentage = (_brightnessLevel * 100).toStringAsFixed(0) + "%";
+      _apiService.setBrightness(widget.deviceId, _brightnessLevel.toString());
+    });
+  }
 
   void _onButtonPressed() {
     showDialog(
@@ -185,9 +175,9 @@ void _updateColor(double brightness) {
             Slider(
               value: _brightnessLevel,
               onChanged: _updateColor,
-              min: 0.0,
-              max: 1.0,
-              divisions: 100,
+              min: 0,
+              max: 128,
+              divisions: 128,
               label: _percentage,
             )
           ],
