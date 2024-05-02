@@ -93,8 +93,14 @@ Future<List<dynamic>> getUserDevices(String id) async {
 }
 
 // Add a new device to a user's account on the server
-Future<dynamic> addUserDevice(String id, Map<String, dynamic> deviceData) async {
+Future<dynamic> addUserDevice(String id, String deviceID, String deviceName, String deviceLocation) async {
     try {
+        Map<String, dynamic> deviceData = {
+            'deviceID': deviceID,
+            'deviceName': deviceName,
+            'deviceLocation': deviceLocation
+        };
+
         final response = await http.post(
             Uri.parse('$_baseUrl/users/$id/devices'),
             headers: <String, String>{
@@ -253,7 +259,7 @@ Future<dynamic> modifyDeviceLocation(String userId, String deviceId, String devi
 }
 
 // Create a new pattern for a user
-Future<Map<String, dynamic>> createPattern(String userId, String patternName, List<Color> position1, List<Color> position2, Color iconColor) async {
+Future<Map<String, dynamic>> createPattern(String userId, String patternName, List<Color> position1, List<Color> position2, Color iconColor, int interval) async {
     // Convert the Color objects to their hex string representation
     List<String> position1Hex = position1.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
     List<String> position2Hex = position2.map((color) => color.value.toRadixString(16).padLeft(8, '0')).toList();
@@ -270,6 +276,7 @@ Future<Map<String, dynamic>> createPattern(String userId, String patternName, Li
             'position2': position2Hex,
             'patternType': 'User',
             'iconColor': iconColorHex,
+            'interval': interval,
         }),
     );
 

@@ -17,6 +17,7 @@ class _SubmitPatternPageState extends State<SubmitPatternPage>{
   String _username = '';
   final _patternNameController = TextEditingController();
   Color _iconColor = Colors.blue;  // Default color
+  final _patternIntervalController = TextEditingController();
 
   @override
   void initState() {
@@ -48,6 +49,14 @@ class _SubmitPatternPageState extends State<SubmitPatternPage>{
                 border: OutlineInputBorder(),
               ),
             ),
+            TextField(
+              controller: _patternIntervalController,
+              keyboardType: TextInputType.number, // Set keyboard type to numerical
+              decoration: InputDecoration(
+                labelText: 'Pattern Interval (ms)',
+                border: OutlineInputBorder(),
+              ),
+            ),
             SizedBox(height: 20),
             Text("Select Icon Color:"),
             ColorPicker(
@@ -72,6 +81,12 @@ class _SubmitPatternPageState extends State<SubmitPatternPage>{
       );
       return;
     }
+    if (_patternIntervalController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a pattern interval')),
+      );
+      return;
+    }
     try {
       final apiService = ApiService();
       Map<String, dynamic> result = await apiService.createPattern(
@@ -80,6 +95,7 @@ class _SubmitPatternPageState extends State<SubmitPatternPage>{
         widget.leftColors,
         widget.rightColors,
         _iconColor,
+        int.parse(_patternIntervalController.text),
       );
       ScaffoldMessenger.of(context).showSnackBar(
         // SnackBar(content: Text('Pattern Saved: ${result['message']}')),

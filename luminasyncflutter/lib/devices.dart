@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:luminasyncflutter/switchButton.dart';
 
 class DeviceManagerScreen extends StatefulWidget {
@@ -19,13 +20,14 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
   void initState() {
     super.initState();
     _devicesFuture = ApiService().getUserDevices(widget.userId);
+    _loadMasterSwitchState();
   }
 
-  // Function to toggle the master switch state
-  void _toggleMasterSwitch() {
+  void _loadMasterSwitchState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool savedSwitchState = prefs.getBool('masterSwitchState') ?? true;
     setState(() {
-      masterSwitchState = true;
-      _turnAllDevices(true);
+      masterSwitchState = savedSwitchState;
     });
   }
 
@@ -47,6 +49,7 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
                 setState(() {
                   masterSwitchState = newValue;
                   _turnAllDevices(newValue);
+                  _saveMasterSwitchState();
                 });
               },
             ),
@@ -92,16 +95,24 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
     );
   }
 
-  // Function to turn on/off all devices based on master switch state
   void _turnAllDevices(bool state) async {
-    try {
-      List<dynamic> devices = await ApiService().getUserDevices(widget.userId);
-      for (var device in devices) {
-        String deviceId = device['deviceid'] as String? ?? '';
-        await ApiService().setPower(deviceId, state ? 'on' : 'off');
-      }
-    } catch (e) {
-      print('Error turning all devices: $e');
+    List<dynamic> devices = await _devicesFuture;
+    for (var device in devices) {
+      String deviceId = device['deviceid'] as String? ?? '';
+      await ApiService().setPower(deviceId, state ? 'on' : 'off');
     }
+  }
+
+  void _toggleMasterSwitch() {
+    setState(() {
+      masterSwitchState = !masterSwitchState;
+      _turnAllDevices(masterSwitchState);
+      _saveMasterSwitchState();
+    });
+  }
+
+  void _saveMasterSwitchState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('masterSwitchState', masterSwitchState);
   }
 }

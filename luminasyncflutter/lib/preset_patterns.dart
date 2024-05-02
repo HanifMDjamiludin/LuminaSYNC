@@ -52,14 +52,14 @@ class _PresetPatternsState extends State<PresetPatterns> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'PRESET PATTERNS',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: Colors.black54,
-        elevation: 10,
-      ),
+    //   appBar: AppBar(
+    //     title: Text(
+    //       'PRESET PATTERNS',
+    //       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+    //     ),
+    //     backgroundColor: Colors.black54,
+    //     elevation: 10,
+    //   ),
       body: FutureBuilder<List<LightingPattern>>(
         future: loadPatterns(),
         builder: (context, snapshot) {
