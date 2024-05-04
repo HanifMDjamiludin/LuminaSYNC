@@ -77,7 +77,6 @@ class _PresetPatternsState extends State<PresetPatterns> {
                       onTap: () {
                         _devices.forEach((device) {
                           _apiService.setEffect(device['deviceid']!, pattern.title);
-                          print("Pattern '${pattern.title}' set on device '${device['devicename']}'");
                         });
                       },
                       child: Container(
