@@ -186,6 +186,22 @@ Future<String> setEffect(String deviceID, String effect) async {
   }
 }
 
+Future<String> setPattern(String deviceID, Map<String, dynamic> pattern) async {
+  final response = await http.post(
+    Uri.parse('$_baseUrl/devices/$deviceID/pattern'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(pattern),
+  );
+
+  if (response.statusCode == 200) {
+    return 'Pattern set successfully';
+  } else {
+    throw Exception('Failed to set pattern: ${response.statusCode}');
+  }
+}
+
 // Delete a device for a user
 Future<dynamic> deleteDevice(String userId, String deviceId) async {
     try {

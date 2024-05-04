@@ -10,11 +10,13 @@ class CustomPatterns extends StatefulWidget {
 class _CustomPatternsState extends State<CustomPatterns> {
   final ApiService _apiService = ApiService();
   Future<List<dynamic>>? _patterns;
+  List<Map<String, String>> _devices = []; // List of device maps
 
   @override
   void initState() {
     super.initState();
     _loadPatterns();
+    _loadDevices();
   }
 
   Future<void> _loadPatterns() async {
@@ -26,6 +28,26 @@ class _CustomPatternsState extends State<CustomPatterns> {
       });
     } else {
       print("No user ID found in SharedPreferences"); // Log an error message
+    }
+  }
+
+    Future<void> _loadDevices() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    if (userId != null) {
+      try {
+        var devices = await _apiService.getUserDevices(userId);
+        setState(() {
+          _devices = devices
+              .map((device) => {
+                    'deviceid': device['deviceid'] as String,
+                    'devicename': device['devicename'] as String
+                  })
+              .toList();
+        });
+      } catch (e) {
+        print('Failed to load devices: $e');
+      }
     }
   }
 
@@ -44,16 +66,23 @@ class _CustomPatternsState extends State<CustomPatterns> {
                 childAspectRatio: 1,
               ),
               itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
+                itemBuilder: (context, index) {
                     var pattern = snapshot.data![index];
                     String colorString = '0xFF' + pattern['patterndata']['iconColor'].substring(2); // Ensure the string starts with '0xFF'
-                    return Card(
-                        child: Container(
-                        alignment: Alignment.center,
-                        child: Text(pattern['patternname']),
-                        decoration: BoxDecoration(
-                            color: Color(int.parse(colorString)),
-                            borderRadius: BorderRadius.circular(10),
+                    return GestureDetector(
+                        onTap: () {
+                            _devices.forEach((device) {
+                            _apiService.setPattern(device['deviceid']!, pattern['patterndata']);
+                            });
+                        },
+                        child: Card(
+                            child: Container(
+                            alignment: Alignment.center,
+                            child: Text(pattern['patternname']),
+                            decoration: BoxDecoration(
+                                color: Color(int.parse(colorString)),
+                                borderRadius: BorderRadius.circular(10),
+                                ),
                             ),
                         ),
                     );
