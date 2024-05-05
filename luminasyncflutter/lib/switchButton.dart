@@ -154,6 +154,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
+<<<<<<< HEAD
         padding: const EdgeInsets.all(30),
         decoration: BoxDecoration(
           color: widget.masterSwitchState ? _chosenColor : Colors.grey,
@@ -193,6 +194,27 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
                   },
                 )
               ],
+=======
+      decoration: BoxDecoration(
+        color: (_switchValue && widget.masterSwitchState)
+            ? _chosenColor
+            : Colors.grey,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          GestureDetector(
+            onTap: (widget.masterSwitchState && _switchValue)
+                ? _onButtonPressed
+                : null,
+            child: Container(
+              padding: const EdgeInsets.all(50),
+              child: Text(
+                '${widget.name} in ${widget.location} is ${widget.masterSwitchState ? (_switchValue ? 'on' : 'off') : 'off'}',
+                style: const TextStyle(color: Colors.white),
+              ),
+>>>>>>> 37e7e19 (functionality/state updates)
             ),
             Slider(
               value: _brightnessLevel,

@@ -35,8 +35,8 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   void _handleLogout(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    //await prefs.clear();
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
     Navigator.pushReplacementNamed(context, '/');
@@ -86,7 +86,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                 DeviceManagerPage(userId: userId)),
                       );
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
                           "No device associated with the user",
                           style: TextStyle(fontSize: 16.0),
@@ -101,7 +101,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       side: BorderSide(color: Colors.white),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Device Manager',
                     style: TextStyle(fontSize: 20.0, color: Colors.white),
                   ),
@@ -115,7 +115,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     elevation: 4,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.white),
+                      side: const BorderSide(color: Colors.white),
                     ),
                   ),
                   child: Text(

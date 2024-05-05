@@ -14,7 +14,7 @@ class DeviceManagerScreen extends StatefulWidget {
 
 class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
   late Future<List<dynamic>> _devicesFuture;
-  bool masterSwitchState = true;
+  bool masterSwitchState = false;
 
   @override
   void initState() {
