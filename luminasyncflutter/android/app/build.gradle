@@ -35,7 +35,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.luminasyncflutter"
-        minSdkVersion flutter.minSdkVersion
+        // minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21  // Updated to support flutter_nsd
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode
         versionName flutterVersionName
