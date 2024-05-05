@@ -121,14 +121,18 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: widget.masterSwitchState ? _chosenColor : Colors.grey,
+        color: (_switchValue && widget.masterSwitchState)
+            ? _chosenColor
+            : Colors.grey,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
-            onTap: widget.masterSwitchState ? _onButtonPressed : null,
+            onTap: (widget.masterSwitchState && _switchValue)
+                ? _onButtonPressed
+                : null,
             child: Container(
               padding: const EdgeInsets.all(50),
               child: Text(
