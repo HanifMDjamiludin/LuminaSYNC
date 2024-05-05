@@ -229,12 +229,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                    Color.fromRGBO(33, 33, 33, 1), // Equivalent to Colors.grey[950]
-                    Color.fromRGBO(112, 112, 112, 1), // Equivalent to Colors.grey[700]
+                      Color.fromRGBO(
+                          33, 33, 33, 1), // Equivalent to Colors.grey[950]
+                      Color.fromRGBO(
+                          112, 112, 112, 1), // Equivalent to Colors.grey[700]
                     ],
                   ),
-                      borderRadius: BorderRadius.circular(25), // Adjust the radius value as needed
-
+                  borderRadius: BorderRadius.circular(
+                      25), // Adjust the radius value as needed
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -268,24 +270,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage>
                                     child: const Text('Sign In'),
                                   ),
                                   const SizedBox(height: 20.0),
-                                  ConstrainedBox(
-                                    constraints:
-                                        const BoxConstraints(maxHeight: 50.0),
-                                    child: OutlinedButton(
-                                      onPressed: () => _signInWithGoogle(),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Text('Sign in with '),
-                                          Image.asset(
-                                            'assets/images/google_logo.png',
-                                            height: 24.0,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
                                   if (_isLoading)
                                     const CircularProgressIndicator(),
                                   if (_errorMessage != null)
