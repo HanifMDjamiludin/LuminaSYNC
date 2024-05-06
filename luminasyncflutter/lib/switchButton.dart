@@ -87,7 +87,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
                       _updateLEDColor(_chosenColor);
                     });
                   },
-                  initialPicker: Picker.paletteHue,
+                  initialPicker: Picker.hsv,
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
