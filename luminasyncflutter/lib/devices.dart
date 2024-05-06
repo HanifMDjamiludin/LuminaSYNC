@@ -74,14 +74,12 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
                 String deviceLocation = device['devicelocation'] as String? ??
                     'No Location Specified';
                 String deviceId = device['deviceid'] as String? ?? '';
-                bool initialSwitchState =
-                    device['switchState'] as bool? ?? false;
 
                 return SwitchAndButton(
                   name: deviceName,
                   location: deviceLocation,
                   deviceId: deviceId,
-                  initialSwitchState: initialSwitchState,
+                  initialSwitchState: true,
                   masterSwitchState: masterSwitchState,
                   toggleMasterSwitch: _toggleMasterSwitch,
                 );
@@ -103,11 +101,20 @@ class _DeviceManagerScreenState extends State<DeviceManagerScreen> {
     }
   }
 
+  void _forceAllSwitchesOn() async {
+    List<dynamic> devices = await _devicesFuture;
+    for (var device in devices) {
+      String deviceId = device['deviceid'] as String? ?? '';
+      await ApiService().setPower(deviceId, 'on');
+    }
+  }
+
   void _toggleMasterSwitch() {
     setState(() {
       masterSwitchState = !masterSwitchState;
       _turnAllDevices(masterSwitchState);
       _saveMasterSwitchState();
+      _forceAllSwitchesOn();
     });
   }
 
