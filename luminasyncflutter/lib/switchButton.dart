@@ -72,13 +72,12 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     setState(() {
       if (_brightnessLevel < brightness) {
         _chosenColor = _chosenColor.lighter(brightnessFraction);
-      } 
+      }
       if (_brightnessLevel > brightness) {
         _chosenColor = _chosenColor.darker(brightnessFraction);
       }
       _brightnessLevel = brightness;
       _percentage = _brightnessLevel.toStringAsFixed(0) + "%";
-      _apiService.setBrightness(widget.deviceId, _brightnessLevel.toString());
     });
   }
 
@@ -197,9 +196,11 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
             ),
             Slider(
               value: _brightnessLevel,
-              onChanged: _updateColor,
-              onChangeEnd: (value) {
+              onChanged: (value) {
+                _updateColor(value);
+                _saveChosenColor(_chosenColor);
                 _saveBrightness(_brightnessLevel);
+                _updateLEDColor(_chosenColor);
               },
               min: 0,
               max: 100,
