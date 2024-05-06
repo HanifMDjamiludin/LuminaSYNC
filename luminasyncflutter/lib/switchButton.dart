@@ -42,6 +42,21 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     _loadBrightness();
   }
 
+  @override
+  void didUpdateWidget(covariant SwitchAndButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.masterSwitchState && !oldWidget.masterSwitchState) {
+      if (!_switchValue) {
+        setState(() {
+          _switchValue = true;
+          _setDevicePower('on');
+          _updateLEDColor(_chosenColor);
+          _saveSwitchState(true);
+        });
+      }
+    }
+  }
+
   void _loadSwitchState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
