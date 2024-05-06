@@ -31,7 +31,7 @@ class _CustomPatternsState extends State<CustomPatterns> {
     }
   }
 
-    Future<void> _loadDevices() async {
+  Future<void> _loadDevices() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString('userId');
     if (userId != null) {
@@ -59,34 +59,37 @@ class _CustomPatternsState extends State<CustomPatterns> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 childAspectRatio: 1,
               ),
               itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                    var pattern = snapshot.data![index];
-                    String colorString = '0xFF' + pattern['patterndata']['iconColor'].substring(2); // Ensure the string starts with '0xFF'
-                    return GestureDetector(
-                        onTap: () {
-                            _devices.forEach((device) {
-                            _apiService.setPattern(device['deviceid']!, pattern['patterndata']);
-                            });
-                        },
-                        child: Card(
-                            child: Container(
-                            alignment: Alignment.center,
-                            child: Text(pattern['patternname']),
-                            decoration: BoxDecoration(
-                                color: Color(int.parse(colorString)),
-                                borderRadius: BorderRadius.circular(10),
-                                ),
-                            ),
-                        ),
-                    );
-                },
+              itemBuilder: (context, index) {
+                var pattern = snapshot.data![index];
+                String colorString = '0xFF' +
+                    pattern['patterndata']['iconColor']
+                        .substring(2); // Ensure the string starts with '0xFF'
+                return GestureDetector(
+                  onTap: () {
+                    for (var device in _devices) {
+                      _apiService.setPattern(
+                          device['deviceid']!, pattern['patterndata']);
+                    }
+                  },
+                  child: Card(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(pattern['patternname']),
+                      decoration: BoxDecoration(
+                        color: Color(int.parse(colorString)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));

@@ -7,16 +7,18 @@ class SubmitPatternPage extends StatefulWidget {
   final List<Color> leftColors;
   final List<Color> rightColors;
 
-  SubmitPatternPage({Key? key, required this.leftColors, required this.rightColors}) : super(key: key);
+  SubmitPatternPage(
+      {Key? key, required this.leftColors, required this.rightColors})
+      : super(key: key);
 
   @override
   _SubmitPatternPageState createState() => _SubmitPatternPageState();
 }
 
-class _SubmitPatternPageState extends State<SubmitPatternPage>{
+class _SubmitPatternPageState extends State<SubmitPatternPage> {
   String _username = '';
   final _patternNameController = TextEditingController();
-  Color _iconColor = Colors.blue;  // Default color
+  Color _iconColor = Colors.blue; // Default color
   final _patternIntervalController = TextEditingController();
 
   @override
@@ -51,7 +53,8 @@ class _SubmitPatternPageState extends State<SubmitPatternPage>{
             ),
             TextField(
               controller: _patternIntervalController,
-              keyboardType: TextInputType.number, // Set keyboard type to numerical
+              keyboardType:
+                  TextInputType.number, // Set keyboard type to numerical
               decoration: InputDecoration(
                 labelText: 'Pattern Interval (ms)',
                 border: OutlineInputBorder(),
@@ -66,7 +69,13 @@ class _SubmitPatternPageState extends State<SubmitPatternPage>{
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _submitPattern,
-              child: Text('Save Pattern'),
+              child: const Text(
+                "Save Pattern",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
             ),
           ],
         ),
