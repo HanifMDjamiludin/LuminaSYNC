@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_color/flutter_color.dart';
 import 'package:luminasyncflutter/src/api_service.dart';
 import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +30,7 @@ class SwitchAndButton extends StatefulWidget {
 class _SwitchAndButtonState extends State<SwitchAndButton> {
   bool _switchValue = false;
   Color _chosenColor = Colors.blue;
-  double _brightnessLevel = 64;
+  double _brightnessLevel = 50;
   String _percentage = "50";
   final ApiService _apiService = ApiService();
 
@@ -38,6 +39,7 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     super.initState();
     _loadSwitchState();
     _loadChosenColor();
+    _loadBrightness();
   }
 
   void _loadSwitchState() async {
@@ -56,10 +58,26 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     });
   }
 
-  void _updateColor(double brightness) {
+  void _loadBrightness() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+      _brightnessLevel =
+          prefs.getDouble('${widget.deviceId}_brightnessLevel') ?? 50;
+    });
+  }
+
+  void _updateColor(double brightness) {
+    int brightnessFloor = brightness.floor();
+    int brightnessFraction = (brightnessFloor / 10).floor();
+    setState(() {
+      if (_brightnessLevel < brightness) {
+        _chosenColor = _chosenColor.lighter(brightnessFraction);
+      } 
+      if (_brightnessLevel > brightness) {
+        _chosenColor = _chosenColor.darker(brightnessFraction);
+      }
       _brightnessLevel = brightness;
-      _percentage = (_brightnessLevel / 128).toStringAsFixed(0) + "%";
+      _percentage = _brightnessLevel.toStringAsFixed(0) + "%";
       _apiService.setBrightness(widget.deviceId, _brightnessLevel.toString());
     });
   }
@@ -120,6 +138,11 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
     prefs.setInt('${widget.deviceId}_chosenColor', color.value);
   }
 
+  void _saveBrightness(double value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('${widget.deviceId}_brightnessLevel', value);
+  }
+
   Future<void> _updateLEDColor(Color color) async {
     try {
       String hexColor = '#${color.value.toRadixString(16).substring(2)}';
@@ -175,9 +198,12 @@ class _SwitchAndButtonState extends State<SwitchAndButton> {
             Slider(
               value: _brightnessLevel,
               onChanged: _updateColor,
+              onChangeEnd: (value) {
+                _saveBrightness(_brightnessLevel);
+              },
               min: 0,
-              max: 128,
-              divisions: 128,
+              max: 100,
+              divisions: 10,
               label: _percentage,
             )
           ],
