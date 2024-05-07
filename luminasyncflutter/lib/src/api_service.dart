@@ -336,9 +336,26 @@ Future<dynamic> deletePattern(String userId, String patternId) async {
     }
 }
 
-//Stop the effect on a device
+// Stop the effect on a device
 Future<String> stopEffect(String deviceID) async {
   return setColor(deviceID, "000000");
+}
+
+// Stop the pattern on a device
+Future<String> stopPattern(String deviceID) async {
+  final response = await http.post(
+    Uri.parse('$_baseUrl/devices/$deviceID/pattern/stop'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({'stop': 'stop'}),
+  );
+
+  if (response.statusCode == 200) {
+    return 'Pattern stopped successfully';
+  } else {
+    throw Exception('Failed to stop pattern');
+  }
 }
 
 // Identify a device by making its lights blink white for 5 seconds
