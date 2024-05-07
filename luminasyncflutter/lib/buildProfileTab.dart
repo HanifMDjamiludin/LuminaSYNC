@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luminasyncflutter/device_manager.dart';
+import 'package:luminasyncflutter/pattern_manager.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -103,6 +104,37 @@ class _ProfileTabState extends State<ProfileTab> {
                   ),
                   child: const Text(
                     'Device Manager',
+                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SharedPreferences.getInstance().then((prefs) {
+                      String? userDetails = prefs.getString('user');
+                      if (userDetails != null) {
+                        Map<String, dynamic> user = jsonDecode(userDetails);
+                        String userId = user['userid'].toString();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PatternManagerPage(userId: userId)),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("No user details available for pattern management"),
+                        ));
+                      }
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                      side: BorderSide(color: Colors.white),
+                    ),
+                  ),
+                  child: Text(
+                    'Pattern Manager',
                     style: TextStyle(fontSize: 20.0, color: Colors.white),
                   ),
                 ),

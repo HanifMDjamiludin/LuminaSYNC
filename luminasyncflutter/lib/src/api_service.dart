@@ -316,6 +316,26 @@ Future<List<dynamic>> getPatterns(String userId) async {
     }
 }
 
+// Delete a pattern for a user
+Future<dynamic> deletePattern(String userId, String patternId) async {
+    try {
+        final response = await http.delete(
+            Uri.parse('$_baseUrl/users/$userId/patterns/$patternId'),
+        );
+        if (response.statusCode == 200) {
+            return json.decode(response.body);
+        } else if (response.statusCode == 401) {
+            throw Exception('Unauthorized');
+        } else if (response.statusCode == 404) {
+            throw Exception('Pattern not found');
+        } else {
+            throw Exception('Failed to delete pattern: ${response.statusCode}');
+        }
+    } catch (e) {
+        throw Exception('Failed to connect to the server: $e');
+    }
+}
+
 //Stop the effect on a device
 Future<String> stopEffect(String deviceID) async {
   return setColor(deviceID, "000000");
