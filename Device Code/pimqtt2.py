@@ -10,6 +10,8 @@ last_state = {}
 device_power = True
 # Pattern running flag
 pattern_active = False
+# Pattern thread
+pattern_thread = None
 
 def get_hyperion_id():
     """ Function to get the Hyperion device ID. """
@@ -33,17 +35,23 @@ def get_hyperion_id():
     return None
 
 def apply_hyperion_command(topic, value):
-    global device_power, pattern_active
+    global device_power, pattern_active, pattern_thread
     try:
         if 'color' in topic:
             if not device_power:
                 return # Ignore color commands if the power state is off
+            if pattern_thread and pattern_thread.is_alive(): # Check if a pattern is running
+                pattern_active = False # Set the pattern_active flag to False
+                pattern_thread.join() # Wait for the pattern thread to finish
             subprocess.run(['hyperion-remote', '-c', value], check=True)
             last_state['color'] = value # Store the last color value
 
         elif 'effect' in topic:
             if not device_power:
                 return # Ignore effect commands if the power state is off
+            if pattern_thread and pattern_thread.is_alive(): # Check if a pattern is running
+                pattern_active = False # Set the pattern_active flag to False
+                pattern_thread.join() # Wait for the pattern thread to finish
             subprocess.run(['hyperion-remote', '-e', value], check=True)
 
         elif 'brightness' in topic:
@@ -54,19 +62,25 @@ def apply_hyperion_command(topic, value):
                 device_power = True # Set power state to on
                 restore_state() # Restore the last known good state
             elif value.lower() == "off":
-                subprocess.run(['hyperion-remote', '-c', '000000'], check=True)
                 pattern_active = False # Stop the pattern
                 device_power = False # Set power state to off
+                subprocess.run(['hyperion-remote', '-c', '000000'], check=True)
 
         elif 'pattern/stop' in topic:
-            pattern_active = False # Stop the pattern
-            restore_state() # Restore the last known good state
+            if pattern_thread and pattern_thread.is_alive(): # Check if a pattern is running
+                pattern_active = False # Set the pattern_active flag to False
+                pattern_thread.join() # Wait for the pattern thread to finish
+                restore_state() # Restore the last known good state
 
         elif 'pattern' in topic:
-            if not device_power or pattern_active:
-                return # Ignore pattern commands if the power state is off or pattern is already running
-            pattern_active = True # Set the pattern running flag
-            threading.Thread(target=run_pattern, args=(value,)).start() # Start the pattern in a new thread
+            if not device_power:
+                return
+            if pattern_thread and pattern_thread.is_alive():
+                pattern_active = False
+                pattern_thread.join()  # Wait for the current pattern to stop
+            pattern_active = True
+            pattern_thread = threading.Thread(target=run_pattern, args=(value,))
+            pattern_thread.start()
 
         else:
             print(f"Received command on unknown topic: {topic}")
@@ -84,8 +98,13 @@ def run_pattern(value):
     while pattern_active:
         subprocess.run(['hyperion-remote', '-c', position1], check=True)
         time.sleep(interval)
+        if not pattern_active:
+            break  # Break if pattern_active becomes False
         subprocess.run(['hyperion-remote', '-c', position2], check=True)
         time.sleep(interval)
+        if not pattern_active:
+            break  # Break if pattern_active becomes False
+
 
 def restore_state():
     '''Function to restore the last known good state'''
