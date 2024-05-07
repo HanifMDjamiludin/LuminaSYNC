@@ -182,6 +182,17 @@ def test_set_pattern(device_id, pattern):
     else:
         print(f"Error occurred: {response.text}")
 
+def test_stop_pattern(device_id):
+    response = requests.post(f"{BASE_URL}/devices/{device_id}/pattern/stop")
+    if response.status_code == 404:
+        print("Device not found")
+    elif response.status_code == 500:
+        print("Failed to publish message")
+    elif response.status_code == 200:
+        print("Stop pattern passed")
+    else:
+        print(f"Error occurred: {response.text}")
+
 
 if __name__ == "__main__":
     test_health_check()
@@ -208,6 +219,7 @@ if __name__ == "__main__":
     # test_update_led_strip(device_id, """["FFFFFF"]""")
     #Test the effect
     # test_set_effect(device_id, "Rainbow swirl")
+    # test_stop_pattern(device_id)
 
     pattern_data = {
         "interval": 500,

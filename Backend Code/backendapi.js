@@ -381,6 +381,30 @@ app.post('/devices/:deviceID/pattern', async (req, res) => {
     }
 });
 
+// Route for stopping a pattern
+app.post('/devices/:deviceID/pattern/stop', async (req, res) => {
+    try {
+        const { deviceID } = req.params; // Device ID from the URL
+        
+        // Check for the presence of the device in the database before publishing
+        const deviceCheckResult = await pool.query('SELECT * FROM Devices WHERE DeviceID = $1', [deviceID]);
+        if (deviceCheckResult.rows.length === 0) {
+            return res.status(404).send('Device not found');
+        }
+        
+        // Publish the stop command to the MQTT topic for the device
+        const stopTopic = `${deviceID}/pattern/stop`;
+        mqttClient.publish(stopTopic, 'stop', (err) => {
+            if (err) {
+                return res.status(500).send('Failed to publish stop command');
+            }
+            res.status(200).send('Pattern stopped successfully');
+        });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
 app.listen(port, () => {
     console.log(`LuminaSync API running on http://localhost:${port}`);
 });
