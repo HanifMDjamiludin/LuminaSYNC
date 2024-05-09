@@ -1,34 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class DeviceDiscoveryPage extends StatefulWidget {
-//   @override
-//   _DeviceDiscoveryPageState createState() => _DeviceDiscoveryPageState();
-// }
-
-// class _DeviceDiscoveryPageState extends State<DeviceDiscoveryPage> {
-//   List<String> deviceIds = ['4291ca36-c9c3-5fd7-abb8-d74469c7a2f7']; // Dummy device IDs
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Device Discovery"),
-//       ),
-//       body: ListView.builder(
-//         itemCount: deviceIds.length,
-//         itemBuilder: (context, index) {
-//           return ListTile(
-//             title: Text(deviceIds[index]),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
-/*
-This page will crash the flutter app when running on emulator, because the emulator does not support NSD. Keeping the placeholder page commented above for reference.
-*/
 import 'package:flutter/material.dart';
 import 'package:flutter_nsd/flutter_nsd.dart';
 import 'add_device_page.dart';
@@ -41,6 +10,7 @@ class DeviceDiscoveryPage extends StatefulWidget {
 class _DeviceDiscoveryPageState extends State<DeviceDiscoveryPage> {
   final FlutterNsd _flutterNsd = FlutterNsd();
   List<NsdServiceInfo> _services = [];
+  bool _isDiscovering = false;
 
   @override
   void initState() {
@@ -50,28 +20,52 @@ class _DeviceDiscoveryPageState extends State<DeviceDiscoveryPage> {
 
   @override
   void dispose() {
-    _flutterNsd.stopDiscovery();
+    if (_isDiscovering) {
+      _stopDiscovery();
+    }
     super.dispose();
   }
 
   void initNsd() async {
-    _flutterNsd.stream.listen(
-      (nsdServiceInfo) {
-        setState(() {
-          _services.add(nsdServiceInfo);
-        });
-        print('Discovered service name: ${nsdServiceInfo.name}');
-        print('Discovered service hostname/IP: ${nsdServiceInfo.hostname}');
-        print('Discovered service port: ${nsdServiceInfo.port}');
-      },
-      onError: (e) {
-        if (e is NsdError) {
-          print('NSD Error: ${e.errorCode}');
-        }
-      }
-    );
+    _flutterNsd.stream.listen((nsdServiceInfo) {
+      setState(() {
+        _services.add(nsdServiceInfo);
+      });
+      print('Discovered service name: ${nsdServiceInfo.name}');
+      print('Discovered service hostname/IP: ${nsdServiceInfo.hostname}');
+      print('Discovered service port: ${nsdServiceInfo.port}');
+    }, onError: (e) {
+      print('NSD Stream Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error during service discovery: $e')));
+    });
 
-    await _flutterNsd.discoverServices('_hyperiond-json._tcp.local.');
+    try {
+      await _flutterNsd.discoverServices('_hyperiond-json._tcp.');
+      setState(() {
+        _isDiscovering = true;
+      });
+    } catch (e) {
+      print('Failed to start discovery: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to start discovery: $e')));
+    }
+  }
+
+  void _stopDiscovery() {
+    _flutterNsd.stopDiscovery().then((_) {
+      print('Discovery stopped successfully.');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Discovery stopped successfully')));
+    }).catchError((e) {
+      print('Error stopping discovery: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error stopping discovery: $e')));
+    }).whenComplete(() {
+      setState(() {
+        _isDiscovering = false;
+      });
+    });
   }
 
   @override
@@ -86,8 +80,10 @@ class _DeviceDiscoveryPageState extends State<DeviceDiscoveryPage> {
           final service = _services[index];
           return ListTile(
             title: Text(service.name ?? 'Unknown Service'),
-            subtitle: Text('${service.hostname ?? 'No Hostname'}:${service.port}'),
+            subtitle:
+                Text('${service.hostname ?? 'No Hostname'}:${service.port}'),
             onTap: () {
+              // Assuming AddDevicePage manages device connection setup and configuration
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => AddDevicePage(serviceInfo: service),
