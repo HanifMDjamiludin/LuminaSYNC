@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nsd/flutter_nsd.dart';
 import 'src/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'device_discovery_page.dart';
 
 class AddDevicePage extends StatefulWidget {
-  final NsdServiceInfo serviceInfo;
+  final ServiceInfoWithId serviceWithId;
 
-  AddDevicePage({Key? key, required this.serviceInfo}) : super(key: key);
+  AddDevicePage({Key? key, required this.serviceWithId}) : super(key: key);
 
   @override
   _AddDevicePageState createState() => _AddDevicePageState();
@@ -20,18 +21,18 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
   ApiService _apiService = ApiService();
   
-    @override
-    void initState() {
-        super.initState();
-        _loadUsername();
-    }
+  @override
+  void initState() {
+    super.initState();
+    _loadUsername();
+  }
 
-    @override
-    void dispose() {
-        _nameController.dispose();
-        _locationController.dispose();
-        super.dispose();
-    }
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
 
   void _loadUsername() async {
     final prefs = await SharedPreferences.getInstance();
@@ -46,17 +47,19 @@ class _AddDevicePageState extends State<AddDevicePage> {
     });
 
     try {
-      final apiService = ApiService();
       var response = await _apiService.addUserDevice(
         _username,
-        widget.serviceInfo.name!,
+        widget.serviceWithId.id,
         _nameController.text,
         _locationController.text,
       );
 
       Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Device added successfully!')));
     } catch (e) {
-      print('Error adding device: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error adding device: $e')));
     } finally {
       setState(() {
         _isSubmitting = false;
